@@ -1,6 +1,6 @@
 http://code.google.com/p/manageditk/
 Dan Mueller
-dan [dot] muel [at] gmail.com
+dan [dot] muel [at] gmail [dot] com
 October 2008
 
 
