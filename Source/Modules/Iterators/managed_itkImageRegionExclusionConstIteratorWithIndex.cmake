@@ -1,0 +1,35 @@
+WRAP_CLASS("itk::ImageRegionExclusionConstIteratorWithIndex")
+
+  SET(MANAGED_TYPE_TEMPLATE ${MANAGED_ITK_SOURCE_COMMON_PATH}/itkManagedImageIteratorWithIndex_TYPE.cxx.in)
+  SET(MANAGED_WRAPPER_TEMPLATE ${MANAGED_ITK_SOURCE_COMMON_PATH}/itkManagedImageIteratorWithIndex_WRAPPER.cxx.in)
+  SET(MANAGED_SUBCLASS itk::itkImageConstIteratorWithIndex)
+
+  WRAP_IMAGE_FILTER_USIGN_INT(1)
+  WRAP_IMAGE_FILTER_SIGN_INT(1)
+  WRAP_IMAGE_FILTER_REAL(1)
+  WRAP_IMAGE_FILTER_BOOL(1)
+
+  BEGIN_MANAGED_CONSTRUCTOR()
+    SET(MANAGED_CONSTRUCTOR_SUMMARY       "Constructor taking image and region.")
+    SET(MANAGED_CONSTRUCTOR_PARAMS        "itk::itkImageBase^ image, itk::itkImageRegion^ region")
+    SET(MANAGED_CONSTRUCTOR_TYPE_BODY     "this->Initialise();\n\t\tthis->m_PointerToNative = new NativeType( (NativeType::ImageType*)image->NativePointer.ToPointer(), itk::ManagedTypes::ToNativeImageRegion<NativeType::ImageDimension>(region) );")
+    SET(MANAGED_CONSTRUCTOR_WRAPPER_BODY  "this->m_MangledTypeString = image->MangledTypeString;\n\t\tarray<Object^>^ args = {image, region};\n\t\tthis->CreateInstance( args );")
+  END_MANAGED_CONSTRUCTOR()
+
+  BEGIN_MANAGED_METHOD("SetExclusionRegion")
+    SET(MANAGED_METHOD_SUMMARY         "Set the exclusion region. The iterator will skip pixels inside this region. The exclusion region must be completely contain inside the normal region used to construct the iterator. A border of at least one pixel should exist between the normal region and the exclusion region.")
+    SET(MANAGED_METHOD_RETURN_TYPE     "void")
+    SET(MANAGED_METHOD_PARAMS          "itk::itkImageRegion^ region")
+    SET(MANAGED_METHOD_TYPE_BODY       "this->m_PointerToNative->SetExclusionRegion( itk::ManagedTypes::ToNativeImageRegion<NativeType::ImageDimension>(region) );")
+    SET(MANAGED_METHOD_WRAPPER_BODY    "iInstance->SetExclusionRegion( region );")
+  END_MANAGED_METHOD()
+
+  BEGIN_MANAGED_METHOD("SetExclusionRegionToInsetRegion")
+    SET(MANAGED_METHOD_SUMMARY         "Set the exclusion region to be inset one pixel from the region the iterator walks. This configures the iterator to only walk the pixels on the boundary of the region.")
+    SET(MANAGED_METHOD_RETURN_TYPE     "void")
+    SET(MANAGED_METHOD_PARAMS          "void")
+    SET(MANAGED_METHOD_TYPE_BODY       "this->m_PointerToNative->SetExclusionRegionToInsetRegion( );")
+    SET(MANAGED_METHOD_WRAPPER_BODY    "iInstance->SetExclusionRegionToInsetRegion( );")
+  END_MANAGED_METHOD()
+
+END_WRAP_CLASS()

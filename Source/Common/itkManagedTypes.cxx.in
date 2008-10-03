@@ -1,0 +1,1376 @@
+/*=============================================================================
+
+  NOTE: THIS FILE IS A HANDMADE WRAPPER FOR THE ManagedITK PROJECT.
+
+  Project:   ManagedITK
+  Program:   Insight Segmentation & Registration Toolkit
+  Module:    itkManagedTypes.cxx
+  Language:  C++/CLI
+  Author:    Dan Mueller
+  Date:      $Date: 2008-06-15 19:37:32 +0200 (Sun, 15 Jun 2008) $
+  Revision:  $Revision: 15 $
+
+  Portions of this code are covered under the ITK and VTK copyright.
+  See http://www.itk.org/HTML/Copyright.htm for details.
+  See http://www.vtk.org/copyright.php for details.
+
+  Copyright (c) 2007-2008 Daniel Mueller
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  THE SOFTWARE.
+
+=============================================================================*/
+
+#pragma once
+
+#ifndef __itkManagedTypes_cxx
+#define __itkManagedTypes_cxx
+
+// Include some ITK headers
+#pragma unmanaged
+#include "itkArray.h"
+#include "itkFixedArray.h"
+#include "itkRGBPixel.h"
+#include "itkRGBAPixel.h"
+#include "itkSize.h"
+#include "itkIndex.h"
+#include "itkContinuousIndex.h"
+#include "itkPoint.h"
+#include "itkVector.h"
+#include "itkCovariantVector.h"
+#include "itkVariableLengthVector.h"
+#include "itkOffset.h"
+#include "itkMatrix.h"
+#include "itkVersor.h"
+#include "itkImageRegion.h"
+#include "itkLevelSet.h"
+#include "itkSpatialOrientation.h"
+#include "itkCellInterface.h"
+#include "itkQuadEdgeMeshPoint.h"
+#include "itkGeometricalQuadEdge.h"
+#include "vnl/vnl_quaternion.h"
+
+// Force managed
+#pragma managed
+
+#include <string>
+using std::string;
+
+// Use some managed namespaces
+#using <mscorlib.dll>
+#using <System.dll>
+using namespace System;
+using namespace System::Diagnostics;
+
+// Include the ManagedITK assembly classes
+#ifdef IncludeManagedTypesFromSource
+#include "itkManagedPixelType.cxx"
+#include "itkManagedPixel.cxx"
+#include "itkManagedSize.cxx"
+#include "itkManagedSpacing.cxx"
+#include "itkManagedIndex.cxx"
+#include "itkManagedContinuousIndex.cxx"
+#include "itkManagedPoint.cxx"
+#include "itkManagedVector.cxx"
+#include "itkManagedOffset.cxx"
+#include "itkManagedMatrix.cxx"
+#include "itkManagedVersor.cxx"
+#include "itkManagedQuaternion.cxx"
+#include "itkManagedImageRegion.cxx"
+#include "itkManagedLevelSetNode.cxx"
+#include "itkManagedSpatialOrientation.cxx"
+#include "itkManagedCell.cxx"
+#else
+#using <@MANAGED_ITK_ASSEMBLY_PREFIX@.Common.dll>
+#endif
+
+namespace itk
+{
+
+private ref class ManagedTypes
+{
+public:
+    ///<summary>Convert a managed string to a native std::string.</summary>
+    static void ToNativeString( System::String^ s, std::string& ns )
+    {
+        const char* chars = (const char*)(System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(s)).ToPointer();
+        ns = chars;
+        System::Runtime::InteropServices::Marshal::FreeHGlobal(IntPtr((void*)chars));
+    }
+
+    ///<summary>Convert a managed Size to a native Size.</summary>
+    template < unsigned int VDimension >
+    static itk::Size<VDimension> ToNativeSize ( itkSize^ size )
+    {
+        itk::Size<VDimension> result;
+        for (unsigned int i=0; i<VDimension; i++)
+            result[i] = size[i];
+        return result;
+    }
+
+    ///<summary>Convert a native Size to a managed Size.</summary>
+    template < unsigned int VDimension >
+    static itkSize^ ToManagedSize ( itk::Size<VDimension> size )
+    {
+        itkSize^ result = gcnew itkSize(VDimension);
+        for (unsigned int i=0; i<VDimension; i++)
+            result[i] = size[i];
+        return result;
+    }
+
+    ///<summary>Convert a managed Spacing to a native Spacing (Vector&lt;double&gt;).</summary>
+    template < unsigned int VDimension >
+    static itk::Vector<double, VDimension> ToNativeSpacing ( itkSpacing^ spacing )
+    {
+        itk::Vector<double, VDimension> result;
+        for (unsigned int i=0; i<VDimension; i++)
+            result[i] = spacing[i];
+        return result;
+    }
+
+    ///<summary>Convert a native Spacing to a managed Spacing.</summary>
+    template < unsigned int VDimension >
+    static itkSpacing^ ToManagedSpacing ( itk::Vector<double, VDimension> spacing )
+    {
+        itkSpacing^ result = gcnew itkSpacing(VDimension);
+        for (unsigned int i=0; i<VDimension; i++)
+            result[i] = spacing[i];
+        return result;
+    }
+
+    ///<summary>Convert a managed ContinuousIndex to a native ContinuousIndex&lt;double&gt;.</summary>
+    template < unsigned int VDimension >
+    static itk::ContinuousIndex<double, VDimension> ToNativeContinuousIndex ( itkContinuousIndex^ cindex )
+    {
+        itk::ContinuousIndex<double, VDimension> result;
+        for (unsigned int i=0; i<VDimension; i++)
+            result[i] = cindex[i];
+        return result;
+    }
+
+    ///<summary>Convert a native ContinuousIndex&lt;double&gt; to a managed ContinuousIndex.</summary>
+    template < unsigned int VDimension >
+    static itkContinuousIndex^ ToManagedContinuousIndex ( itk::ContinuousIndex<double, VDimension> cindex )
+    {
+        itkContinuousIndex^ result = gcnew itkContinuousIndex(VDimension);
+        for (unsigned int i=0; i<VDimension; i++)
+            result[i] = cindex[i];
+        return result;
+    }
+
+    ///<summary>Convert a managed Index to a native Index.</summary>
+    template < unsigned int VDimension >
+    static itk::Index<VDimension> ToNativeIndex ( itkIndex^ index )
+    {
+        itk::Index<VDimension> result;
+        for (unsigned int i=0; i<VDimension; i++)
+            result[i] = index[i];
+        return result;
+    }
+
+    ///<summary>Convert a native Index to a managed Index.</summary>
+    template < unsigned int VDimension >
+    static itkIndex^ ToManagedIndex ( itk::Index<VDimension> index )
+    {
+        itkIndex^ result = gcnew itkIndex(VDimension);
+        for (unsigned int i=0; i<VDimension; i++)
+            result[i] = index[i];
+        return result;
+    }
+
+    ///<summary>Convert a managed Offset to a native Offset.</summary>
+    template < unsigned int VDimension >
+    static itk::Offset<VDimension> ToNativeOffset ( itkOffset^ offset )
+    {
+        itk::Offset<VDimension> result;
+        for (unsigned int i=0; i<VDimension; i++)
+            result[i] = offset[i];
+        return result;
+    }
+
+    ///<summary>Convert a native Offset to a managed Offset.</summary>
+    template < unsigned int VDimension >
+    static itkOffset^ ToManagedOffset ( itk::Offset<VDimension> offset )
+    {
+        itkOffset^ result = gcnew itkOffset(VDimension);
+        for (unsigned int i=0; i<VDimension; i++)
+            result[i] = offset[i];
+        return result;
+    }
+
+    ///<summary>Convert a managed Point to a native Point&lt;double&gt;.</summary>
+    template < unsigned int VDimension >
+    static itk::Point<double, VDimension> ToNativePoint ( itkPoint^ point )
+    {
+        itk::Point<double, VDimension> result;
+        for (unsigned int i=0; i<VDimension; i++)
+            result[i] = point[i];
+        return result;
+    }
+
+    ///<summary>Convert a native Point&lt;float&gt; to a managed Point.</summary>
+    template < unsigned int VDimension >
+    static itkPoint^ ToManagedPoint ( itk::Point<float, VDimension > point )
+    {
+        itkPoint^ result = gcnew itkPoint(VDimension);
+        for (unsigned int i=0; i<VDimension; i++)
+            result[i] = point[i];
+        return result;
+    }
+
+    ///<summary>Convert a native Point&lt;double&gt; to a managed Point.</summary>
+    template < unsigned int VDimension >
+    static itkPoint^ ToManagedPoint ( itk::Point<double, VDimension > point )
+    {
+        itkPoint^ result = gcnew itkPoint(VDimension);
+        for (unsigned int i=0; i<VDimension; i++)
+            result[i] = point[i];
+        return result;
+    }
+
+    ///<summary>Convert a native double* to a managed Point.</summary>
+    template < unsigned int VDimension >
+    static itkPoint^ ToManagedPoint ( const double* point )
+    {
+        itkPoint^ result = gcnew itkPoint(VDimension);
+        for (unsigned int i=0; i<VDimension; i++)
+            result[i] = point[i];
+        return result;
+    }
+
+    ///<summary>Convert a native QuadEdgePoint&lt;double&gt; to a managed Point.</summary>
+    ///<remarks>The VDimension template parameter is ignored because QuadEdgeMeshPoint has a concept check that DimensionShouldBe3.</remarks>
+    template < unsigned int VDimension >
+    static itkPoint^ ToManagedPoint ( itk::QuadEdgeMeshPoint<double, 3, itk::GeometricalQuadEdge<unsigned long, unsigned long, bool, bool> > point )
+    {
+        itkPoint^ result = gcnew itkPoint(VDimension);
+        for (unsigned int i=0; i<VDimension; i++)
+            result[i] = point[i];
+        return result;
+    }
+
+    ///<summary>Convert a native QuadEdgePoint&lt;double&gt; to a managed Point.</summary>
+    ///<remarks>The VDimension template parameter is ignored because QuadEdgeMeshPoint has a concept check that DimensionShouldBe3.</remarks>
+    template < unsigned int VDimension >
+    static itkPoint^ ToManagedPoint ( itk::QuadEdgeMeshPoint<float, 3, itk::GeometricalQuadEdge<unsigned long, unsigned long, bool, bool> > point )
+    {
+        itkPoint^ result = gcnew itkPoint(VDimension);
+        for (unsigned int i=0; i<VDimension; i++)
+            result[i] = point[i];
+        return result;
+    }
+
+    ///<summary>Convert a managed Vector (element type is Double) to a native Vector&lt;TElement&gt;.</summary>
+    template < unsigned int VDimension >
+    static itk::Vector<double, VDimension> ToNativeVector ( itkVector^ vector )
+    {
+        itk::Vector<double, VDimension> result;
+        for (unsigned int i=0; i<VDimension; i++)
+            result[i] = static_cast<double>(vector[i]);
+        return result;
+    }
+
+    ///<summary>Convert a native Vector&lt;TElement&gt; to a managed Vector (element type is Double).</summary>
+    template < unsigned int VDimension >
+    static itkVector^ ToManagedVector ( itk::Vector<double, VDimension> vector )
+    {
+        itkVector^ result = gcnew itkVector(VDimension);
+        for (unsigned int i=0; i<VDimension; i++)
+            result[i] = static_cast<System::Double>(vector[i]);
+        return result;
+    }
+
+    ///<summary>Convert a managed array to a native Vector&lt;TElement&gt;.</summary>
+    template < class TElement, unsigned int VDimension >
+    static itk::Vector<TElement, VDimension> ToNativeVector ( itkArray<TElement>^ vector )
+    {
+        itk::Vector<TElement, VDimension> result;
+        for (unsigned int i=0; i<VDimension; i++)
+            result[i] = static_cast<TElement>(vector[i]);
+        return result;
+    }
+
+    ///<summary>Convert a native Vector&lt;TElement&gt; to a managed array.</summary>
+    template < class TElement, unsigned int VDimension >
+    static itkArray<TElement>^ ToManagedVector ( itk::Vector<TElement, VDimension> vector )
+    {
+        itkArray<TElement>^ result = gcnew itkArray<TElement>(VDimension);
+        for (unsigned int i=0; i<VDimension; i++)
+            result[i] = static_cast<System::Double>(vector[i]);
+        return result;
+    }
+
+    ///<summary>Convert a managed array to a native CovariantVector&lt;TElement&gt;.</summary>
+    template < class TElement, unsigned int VDimension >
+    static itk::CovariantVector<TElement, VDimension> ToNativeCovariantVector ( itkArray<TElement>^ vector )
+    {
+        itk::CovariantVector<TElement, VDimension> result;
+        for (unsigned int i=0; i<VDimension; i++)
+            result[i] = static_cast<TElement>(vector[i]);
+        return result;
+    }
+
+    ///<summary>Convert a native CovariantVector&lt;TElement&gt; to a managed array.</summary>
+    template < class TElement, unsigned int VDimension >
+    static itkArray<TElement>^ ToManagedCovariantVector ( itk::CovariantVector<TElement, VDimension> vector )
+    {
+        itkArray<TElement>^ result = gcnew itkArray<TElement>(VDimension);
+        for (unsigned int i=0; i<VDimension; i++)
+            result[i] = static_cast<TElement>(vector[i]);
+        return result;
+    }
+
+    ///<summary>Convert a managed array to a native VariableLengthVector&lt;TElement&gt;.</summary>
+    template < class TElement >
+    static itk::VariableLengthVector<TElement> ToNativeVariableLengthVector ( itkArray<TElement>^ vector )
+    {
+        itk::VariableLengthVector<TElement> result(vector->Length);
+        for (unsigned int i=0; i<vector->Length; i++)
+            result[i] = static_cast<TElement>(vector[i]);
+        return result;
+    }
+
+    ///<summary>Convert a native VariableLengthVector&lt;TElement&gt; to a managed array.</summary>
+    template < class TElement >
+    static itkArray<TElement>^ ToManagedVariableLengthVector ( itk::VariableLengthVector<TElement> vector )
+    {
+        itkArray<TElement>^ result = gcnew itkArray<TElement>(vector.Size());
+        for (unsigned int i=0; i<vector.Size(); i++)
+            result[i] = static_cast<TElement>(vector[i]);
+        return result;
+    }
+
+    ///<summary>Convert a managed RGBPixel to a native RGBPixel.</summary>
+    template < class TElement >
+    static itk::RGBPixel<TElement> ToNativeRGBPixel ( itkArray<TElement>^ rgbManaged )
+    {
+        itk::RGBPixel<TElement> result;
+        for (unsigned int i=0; i<3; i++)
+            result[i] = static_cast<TElement>(rgbManaged[i]);
+        return result;
+    }
+
+    ///<summary>Convert a native RGBPixel to a managed RGBPixel.</summary>
+    template < class TElement >
+    static itkArray<TElement>^ ToManagedRGBPixel ( itk::RGBPixel<TElement> rgbNative )
+    {
+        itkArray<TElement>^ result = gcnew itkArray<TElement>(3);
+        for (unsigned int i=0; i<3; i++)
+            result[i] = static_cast<TElement>(rgbNative[i]);
+        return result;
+    }
+
+    ///<summary>Convert a managed RGBAPixel to a native RGBAPixel.</summary>
+    template < class TElement >
+    static itk::RGBAPixel<TElement> ToNativeRGBAPixel ( itkArray<TElement>^ rgbaManaged )
+    {
+        itk::RGBAPixel<TElement> result;
+        for (unsigned int i=0; i<4; i++)
+            result[i] = static_cast<TElement>(rgbaManaged[i]);
+        return result;
+    }
+
+    ///<summary>Convert a native RGBAPixel to a managed RGBAPixel.</summary>
+    template < class TElement >
+    static itkArray<TElement>^ ToManagedRGBAPixel ( itk::RGBAPixel<TElement> rgbaNative )
+    {
+        itkArray<TElement>^ result = gcnew itkArray<TElement>(4);
+        for (unsigned int i=0; i<4; i++)
+            result[i] = static_cast<TElement>(rgbaNative[i]);
+        return result;
+    }
+
+    ///<summary>Convert a managed ImageRegion to a native ImageRegion.</summary>
+    template < unsigned int VDimension >
+    static itk::ImageRegion<VDimension> ToNativeImageRegion ( itkImageRegion^ region )
+    {
+        itk::ImageRegion<VDimension> result;
+        result.SetSize( ManagedTypes::ToNativeSize<VDimension>( region->Size) );
+        result.SetIndex( ManagedTypes::ToNativeIndex<VDimension>( region->Index) );
+        return result;
+    }
+
+    ///<summary>Convert a native ImageRegion to a managed ImageRegion.</summary>
+    template < unsigned int VDimension >
+    static itkImageRegion^ ToManagedImageRegion ( itk::ImageRegion<VDimension> region )
+    {
+        itkSize^ size = ManagedTypes::ToManagedSize( region.GetSize() );
+        itkIndex^ index = ManagedTypes::ToManagedIndex( region.GetIndex() );
+        return gcnew itkImageRegion( size, index );
+    }
+
+    ///<summary>Convert a managed Versor to a native Versor.</summary>
+    static itk::Versor<double> ToNativeVersor ( itkVersor^ managed )
+    {
+        itk::Versor<double> native;
+        native.Set( managed->X, managed->Y, managed->Z, managed->W );
+        return native;
+    }
+
+    ///<summary>Convert a native Versor to a managed Versor.</summary>
+    static itkVersor^ ToManagedVersor ( itk::Versor<double> native )
+    {
+        return gcnew itkVersor( native.GetX(), native.GetY(), native.GetZ(), native.GetW() );
+    }
+
+    ///<summary>Convert a managed Quaternion to a native Quaternion.</summary>
+    static vnl_quaternion<double> ToNativeQuaternion ( itkQuaternion^ managed )
+    {
+        vnl_quaternion<double> native(managed->X, managed->Y, managed->Z, managed->W);
+        return native;
+    }
+
+    ///<summary>Convert a native Quaternion to a managed Quaternion.</summary>
+    static itkQuaternion^ ToManagedQuaternion ( vnl_quaternion<double> native )
+    {
+        return gcnew itkQuaternion( native(0), native(1), native(2), native(3) );
+    }
+
+    ///<summary>Convert a managed Matrix to a native Matrix.</summary>
+    template < class T, unsigned int NRows, unsigned int NCols >
+    static itk::Matrix<T,NRows,NCols> ToNativeMatrix ( itkMatrix^ managed )
+    {
+        // TODO: IMPORTANT:
+        // NOTE: The below code will cause memory leaks, becaused the native
+        //       matrix will never be freed using delete !!
+        // Why is itk::Matrix not an itk::SmartPointer ????!!!
+        itk::Matrix<T,NRows,NCols>* native = new itk::Matrix<T,NRows,NCols>();
+        for (unsigned int i=0; i<NRows; i++)
+            for (unsigned int j=0; j<NCols; j++)
+                native->operator()(i,j) = managed->Get(i,j);
+        return *native;
+    }
+
+    ///<summary>Convert a native Matrix to a managed Matrix.</summary>
+    template < class T, unsigned int NRows, unsigned int NCols >
+    static itkMatrix^ ToManagedMatrix ( itk::Matrix<T,NRows,NCols> matrix )
+    {
+        itkMatrix^ result = gcnew itkMatrix( NRows, NCols );
+        for (unsigned int i=0; i<NRows; i++)
+            for (unsigned int j=0; j<NCols; j++)
+                result[i,j] = static_cast<double>( matrix(i,j) );
+        return result;
+    }
+
+    ///<summary>Convert the given managed array to an itk::FixedArray.</summary>
+    template <typename TValueType, unsigned int VLength>
+    static itk::FixedArray<TValueType, VLength> ToNativeFixedArray( ... array<TValueType>^ managedArray )
+    {
+        itk::FixedArray<TValueType, VLength> nativeArray;
+        for (unsigned int i=0; i<VLength; i++)
+            nativeArray[i] = managedArray[i];
+        return nativeArray;
+    }
+
+    ///<summary>Convert the given itk::FixedArray to a managed array.</summary>
+    template <typename TValueType, unsigned int VLength>
+    static array<TValueType>^ ToManagedFixedArray( itk::FixedArray<TValueType, VLength> nativeArray )
+    {
+        array<TValueType>^ managedArray = gcnew array<TValueType>( VLength );
+        for (unsigned int i=0; i<VLength; i++)
+            managedArray[i] = nativeArray[i];
+        return managedArray;
+    }
+
+    ///<summary>Convert the given managed itkArray to an itk::Array.</summary>
+    template <typename TValueType>
+    static itk::Array<TValueType> ToNativeArray( itkArray<TValueType>^ managedArray )
+    {
+        itk::Array<TValueType> nativeArray( managedArray->Dimension );
+        for (unsigned int i=0; i<managedArray->Dimension; i++)
+            nativeArray[i] = managedArray[i];
+        return nativeArray;
+    }
+
+    ///<summary>Convert the given itk::Array to a managed itkArray.</summary>
+    template <typename TValueType>
+    static itkArray<TValueType>^ ToManagedArray( itk::Array<TValueType> nativeArray )
+    {
+        itkArray<TValueType>^ managedArray = gcnew itkArray<TValueType>( nativeArray.Size() );
+        for (unsigned int i=0; i<nativeArray.Size(); i++)
+            managedArray[i] = nativeArray[i];
+        return managedArray;
+    }
+
+    ///<summary>Convert the given managed cli::array to an itk::Array.</summary>
+    template <typename TValueType>
+    static itk::Array<TValueType> ToNativeArray( array<TValueType>^ managedArray )
+    {
+        itk::Array<TValueType> nativeArray( managedArray->Length );
+        for (unsigned int i=0; i<managedArray->Length; i++)
+            nativeArray[i] = managedArray[i];
+        return nativeArray;
+    }
+
+    ///<summary>Convert the given itk::Array to a managed cli::array.</summary>
+    template <typename TValueType>
+    static array<TValueType>^ ToManagedCliArray( itk::Array<TValueType> nativeArray )
+    {
+        array<TValueType>^ managedArray = gcnew array<TValueType>( nativeArray.Size() );
+        for (unsigned int i=0; i<nativeArray.Size(); i++)
+            managedArray[i] = nativeArray[i];
+        return managedArray;
+    }
+
+    static SpatialOrientation::ValidCoordinateOrientationFlags ToNativeSpatialOrientation( itkSpatialOrientationEnum value )
+    {
+        switch (value)
+        {
+        case itkSpatialOrientationEnum::RIP: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_RIP;
+        case itkSpatialOrientationEnum::LIP: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_LIP;
+        case itkSpatialOrientationEnum::RSP: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_RSP;
+        case itkSpatialOrientationEnum::LSP: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_LSP;
+        case itkSpatialOrientationEnum::RIA: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_RIA;
+        case itkSpatialOrientationEnum::LIA: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_LIA;
+        case itkSpatialOrientationEnum::RSA: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_RSA;
+        case itkSpatialOrientationEnum::LSA: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_LSA;
+        case itkSpatialOrientationEnum::IRP: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_IRP;
+        case itkSpatialOrientationEnum::ILP: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_ILP;
+        case itkSpatialOrientationEnum::SRP: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_SRP;
+        case itkSpatialOrientationEnum::SLP: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_SLP;
+        case itkSpatialOrientationEnum::IRA: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_IRA;
+        case itkSpatialOrientationEnum::ILA: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_ILA;
+        case itkSpatialOrientationEnum::SRA: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_SRA;
+        case itkSpatialOrientationEnum::SLA: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_SLA;
+        case itkSpatialOrientationEnum::RPI: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_RPI;
+        case itkSpatialOrientationEnum::LPI: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_LPI;
+        case itkSpatialOrientationEnum::RAI: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_RAI;
+        case itkSpatialOrientationEnum::LAI: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_LAI;
+        case itkSpatialOrientationEnum::RPS: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_RPS;
+        case itkSpatialOrientationEnum::LPS: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_LPS;
+        case itkSpatialOrientationEnum::RAS: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_RAS;
+        case itkSpatialOrientationEnum::LAS: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_LAS;
+        case itkSpatialOrientationEnum::PRI: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_PRI;
+        case itkSpatialOrientationEnum::PLI: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_PLI;
+        case itkSpatialOrientationEnum::ARI: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_ARI;
+        case itkSpatialOrientationEnum::ALI: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_ALI;
+        case itkSpatialOrientationEnum::PRS: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_PRS;
+        case itkSpatialOrientationEnum::PLS: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_PLS;
+        case itkSpatialOrientationEnum::ARS: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_ARS;
+        case itkSpatialOrientationEnum::ALS: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_ALS;
+        case itkSpatialOrientationEnum::IPR: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_IPR;
+        case itkSpatialOrientationEnum::SPR: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_SPR;
+        case itkSpatialOrientationEnum::IAR: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_IAR;
+        case itkSpatialOrientationEnum::SAR: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_SAR;
+        case itkSpatialOrientationEnum::IPL: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_IPL;
+        case itkSpatialOrientationEnum::SPL: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_SPL;
+        case itkSpatialOrientationEnum::IAL: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_IAL;
+        case itkSpatialOrientationEnum::SAL: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_SAL;
+        case itkSpatialOrientationEnum::PIR: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_PIR;
+        case itkSpatialOrientationEnum::PSR: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_PSR;
+        case itkSpatialOrientationEnum::AIR: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_AIR;
+        case itkSpatialOrientationEnum::ASR: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_ASR;
+        case itkSpatialOrientationEnum::PIL: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_PIL;
+        case itkSpatialOrientationEnum::PSL: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_PSL;
+        case itkSpatialOrientationEnum::AIL: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_AIL;
+        case itkSpatialOrientationEnum::ASL: return SpatialOrientation::ITK_COORDINATE_ORIENTATION_ASL;
+        default: throw gcnew System::ComponentModel::InvalidEnumArgumentException("Invalid spatial orientation");
+        }
+    }
+
+    static itkSpatialOrientationEnum ToManagedSpatialOrientation( SpatialOrientation::ValidCoordinateOrientationFlags value )
+    {
+        switch (value)
+        {
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_RIP: return itkSpatialOrientationEnum::RIP;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_LIP: return itkSpatialOrientationEnum::LIP;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_RSP: return itkSpatialOrientationEnum::RSP;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_LSP: return itkSpatialOrientationEnum::LSP;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_RIA: return itkSpatialOrientationEnum::RIA;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_LIA: return itkSpatialOrientationEnum::LIA;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_RSA: return itkSpatialOrientationEnum::RSA;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_LSA: return itkSpatialOrientationEnum::LSA;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_IRP: return itkSpatialOrientationEnum::IRP;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_ILP: return itkSpatialOrientationEnum::ILP;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_SRP: return itkSpatialOrientationEnum::SRP;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_SLP: return itkSpatialOrientationEnum::SLP;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_IRA: return itkSpatialOrientationEnum::IRA;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_ILA: return itkSpatialOrientationEnum::ILA;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_SRA: return itkSpatialOrientationEnum::SRA;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_SLA: return itkSpatialOrientationEnum::SLA;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_RPI: return itkSpatialOrientationEnum::RPI;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_LPI: return itkSpatialOrientationEnum::LPI;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_RAI: return itkSpatialOrientationEnum::RAI;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_LAI: return itkSpatialOrientationEnum::LAI;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_RPS: return itkSpatialOrientationEnum::RPS;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_LPS: return itkSpatialOrientationEnum::LPS;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_RAS: return itkSpatialOrientationEnum::RAS;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_LAS: return itkSpatialOrientationEnum::LAS;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_PRI: return itkSpatialOrientationEnum::PRI;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_PLI: return itkSpatialOrientationEnum::PLI;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_ARI: return itkSpatialOrientationEnum::ARI;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_ALI: return itkSpatialOrientationEnum::ALI;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_PRS: return itkSpatialOrientationEnum::PRS;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_PLS: return itkSpatialOrientationEnum::PLS;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_ARS: return itkSpatialOrientationEnum::ARS;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_ALS: return itkSpatialOrientationEnum::ALS;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_IPR: return itkSpatialOrientationEnum::IPR;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_SPR: return itkSpatialOrientationEnum::SPR;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_IAR: return itkSpatialOrientationEnum::IAR;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_SAR: return itkSpatialOrientationEnum::SAR;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_IPL: return itkSpatialOrientationEnum::IPL;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_SPL: return itkSpatialOrientationEnum::SPL;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_IAL: return itkSpatialOrientationEnum::IAL;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_SAL: return itkSpatialOrientationEnum::SAL;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_PIR: return itkSpatialOrientationEnum::PIR;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_PSR: return itkSpatialOrientationEnum::PSR;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_AIR: return itkSpatialOrientationEnum::AIR;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_ASR: return itkSpatialOrientationEnum::ASR;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_PIL: return itkSpatialOrientationEnum::PIL;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_PSL: return itkSpatialOrientationEnum::PSL;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_AIL: return itkSpatialOrientationEnum::AIL;
+        case SpatialOrientation::ITK_COORDINATE_ORIENTATION_ASL: return itkSpatialOrientationEnum::ASL;
+        default: throw gcnew System::ComponentModel::InvalidEnumArgumentException("Invalid spatial orientation");
+        }
+    }
+
+    ///<summary>A helper method to convert a managed node to a native levelset node.</summary>
+    template< class TPixel, unsigned int VSetDimension >
+    static itk::LevelSetNode<TPixel, VSetDimension> ToNativeLevelSetNode( itkLevelSetNode^ managedNode )
+    {
+        itk::LevelSetNode<TPixel, VSetDimension> nativeNode;
+        nativeNode.SetValue( managedNode->Value );
+        nativeNode.SetIndex( ManagedTypes::ToNativeIndex<VSetDimension>(managedNode->Index) );
+        return nativeNode;
+    }
+
+    ///<summary>A helper method to convert a native node to a managed node.</summary>
+    template< class TPixel, unsigned int VSetDimension >
+    static itkLevelSetNode^ ToManagedLevelSetNode( itk::LevelSetNode<TPixel, VSetDimension> nativeNode )
+    {
+        return gcnew itkLevelSetNode(
+            static_cast<TPixel>( nativeNode.GetValue() ),                          //Value
+            ManagedTypes::ToManagedIndex<VSetDimension>( nativeNode.GetIndex() ) //Index
+            );
+    }
+
+    ///<summary>A helper method to convert a native cell to a managed cell.</summary>
+    template< class TPixel, class TCell >
+    static itkCell^ ToManagedCell( itk::CellInterface<TPixel, TCell> *nativeCell )
+    {
+        typedef itk::CellInterface<TPixel, TCell> CellType;
+      
+        // Create pointids array
+        unsigned int i = 0;
+        unsigned int numPoints = nativeCell->GetNumberOfPoints();
+        array< unsigned long >^ pointids = gcnew array< unsigned long >( numPoints );
+        CellType::PointIdConstIterator it = nativeCell->PointIdsBegin();
+        CellType::PointIdConstIterator itEnd = nativeCell->PointIdsEnd();
+        while( it != itEnd )
+        {
+            pointids[i++] = *it;
+            ++it;
+        }
+
+        // Get type, create cell, and return
+        unsigned int typeAsInt = nativeCell->GetType();
+        itkCellTypeEnum type = (itkCellTypeEnum)typeAsInt;
+        return gcnew itkCell( type, nativeCell->GetDimension(), pointids );
+    }
+
+    ///</summary>Convert the given managed array of LevelSetNodes to a native container.</summary>
+    template< class TPixel, unsigned int VSetDimension >
+    static itk::VectorContainer< unsigned int, itk::LevelSetNode<TPixel, VSetDimension> >* ToNativeLevelSetNodeContainer( ... array<itkLevelSetNode^>^ managedContainer )
+    {
+        // Some useful typedefs
+        typedef itk::LevelSetNode< TPixel, VSetDimension >     NodeType;
+        typedef itk::VectorContainer< unsigned int, NodeType > NodeContainer;
+
+        // Create native container
+        NodeContainer::Pointer nativeContainer = NodeContainer::New();
+        nativeContainer->Initialize();
+
+        // Insert the native elements
+        for (unsigned int i=0; i<managedContainer->Length; i++)
+            nativeContainer->InsertElement( i, ManagedTypes::ToNativeLevelSetNode<TPixel, VSetDimension>(managedContainer[i]) );
+
+        // Keep nativeContainer alive
+        nativeContainer->Register();
+
+        // Return
+        return nativeContainer;
+    }
+
+    ///<summary>Convert the given native container of LevelSetNodes to a managed array.</summary>
+    template< class TPixel, unsigned int VSetDimension >
+    static array<itkLevelSetNode^>^ ToManagedLevelSetNodeContainer( itk::VectorContainer< unsigned int, itk::LevelSetNode<TPixel, VSetDimension> >* nativeContainer )
+    {
+        array<itkLevelSetNode^>^ managedContainer = gcnew array<itkLevelSetNode^>( nativeContainer->Size() );
+        for (unsigned int i=0; i<managedContainer->Length; i++)
+            managedContainer[i] = ManagedTypes::ToManagedLevelSetNode<TPixel, VSetDimension>( nativeContainer->GetElement(i) );
+        return managedContainer;
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from. Can be a primative type (ie. unsigned char, float) or a Vector, etc.</param>
+    template< class TPixel >
+    static itkPixel^ ToManagedPixel ( TPixel nativeValue )
+    {
+        throw gcnew NotSupportedException("Conversion to a managed pixel is not supported for this image type.");
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( unsigned char nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::UC, nativeValue );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( signed char nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::SC, nativeValue );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( unsigned short nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::US, nativeValue );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( signed short nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::SS, nativeValue );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( unsigned long nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::UL, nativeValue );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( signed long nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::SL, nativeValue );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( float nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::F, nativeValue );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( double nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::D, nativeValue );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( bool nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::B, nativeValue );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::Vector<unsigned char, 2> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::VUC2, ManagedTypes::ToManagedVector<unsigned char, 2>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::Vector<unsigned char, 3> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::VUC3, ManagedTypes::ToManagedVector<unsigned char, 3>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::Vector<signed char, 2> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::VSC2, ManagedTypes::ToManagedVector<signed char, 2>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::Vector<signed char, 3> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::VSC3, ManagedTypes::ToManagedVector<signed char, 3>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::Vector<unsigned short, 2> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::VUS2, ManagedTypes::ToManagedVector<unsigned short, 2>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::Vector<unsigned short, 3> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::VUS3, ManagedTypes::ToManagedVector<unsigned short, 3>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::Vector<signed short, 2> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::VSS2, ManagedTypes::ToManagedVector<signed short, 2>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::Vector<signed short, 3> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::VSS3, ManagedTypes::ToManagedVector<signed short, 3>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::Vector<float, 2> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::VF2, ManagedTypes::ToManagedVector<float, 2>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::Vector<float, 3> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::VF3, ManagedTypes::ToManagedVector<float, 3>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::Vector<double, 2> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::VD2, ManagedTypes::ToManagedVector<double, 2>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::Vector<double, 3> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::VD3, ManagedTypes::ToManagedVector<double, 3>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::CovariantVector<unsigned char, 2> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::CVUC2, ManagedTypes::ToManagedCovariantVector<unsigned char, 2>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::CovariantVector<unsigned char, 3> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::CVUC3, ManagedTypes::ToManagedCovariantVector<unsigned char, 3>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::CovariantVector<signed char, 2> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::CVSC2, ManagedTypes::ToManagedCovariantVector<signed char, 2>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::CovariantVector<signed char, 3> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::CVSC3, ManagedTypes::ToManagedCovariantVector<signed char, 3>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::CovariantVector<unsigned short, 2> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::CVUS2, ManagedTypes::ToManagedCovariantVector<unsigned short, 2>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::CovariantVector<unsigned short, 3> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::CVUS3, ManagedTypes::ToManagedCovariantVector<unsigned short, 3>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::CovariantVector<signed short, 2> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::CVSS2, ManagedTypes::ToManagedCovariantVector<signed short, 2>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::CovariantVector<signed short, 3> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::CVSS3, ManagedTypes::ToManagedCovariantVector<signed short, 3>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::CovariantVector<float, 2> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::CVF2, ManagedTypes::ToManagedCovariantVector<float, 2>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::CovariantVector<float, 3> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::CVF3, ManagedTypes::ToManagedCovariantVector<float, 3>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::CovariantVector<double, 2> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::CVD2, ManagedTypes::ToManagedCovariantVector<double, 2>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::CovariantVector<double, 3> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::CVD3, ManagedTypes::ToManagedCovariantVector<double, 3>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::VariableLengthVector<unsigned char> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::VLVUC, ManagedTypes::ToManagedVariableLengthVector<unsigned char>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::VariableLengthVector<unsigned short> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::VLVUS, ManagedTypes::ToManagedVariableLengthVector<unsigned short>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::VariableLengthVector<signed short> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::VLVSS, ManagedTypes::ToManagedVariableLengthVector<signed short>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::VariableLengthVector<float> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::VLVF, ManagedTypes::ToManagedVariableLengthVector<float>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::VariableLengthVector<double> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::VLVF, ManagedTypes::ToManagedVariableLengthVector<double>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::RGBPixel<unsigned char> nativeValue )
+    {
+        return gcnew itkPixel( itkPixelType::RGBUC, ManagedTypes::ToManagedRGBPixel<unsigned char>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::RGBPixel<unsigned short> nativeValue )
+    {
+        // Convert vector to a managed vector
+        return gcnew itkPixel( itkPixelType::RGBUS, ManagedTypes::ToManagedRGBPixel<unsigned short>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::RGBAPixel<unsigned char> nativeValue )
+    {
+        // Convert vector to a managed vector
+        return gcnew itkPixel( itkPixelType::RGBAUC, ManagedTypes::ToManagedRGBAPixel<unsigned char>(nativeValue) );
+    }
+
+    ///<summary>Convert the given native pixel to a managed pixel.</summary>
+    ///<param name="nativeValue">The native pixel to convert from.</param>
+    template< >
+    static itkPixel^ ToManagedPixel ( itk::RGBAPixel<unsigned short> nativeValue )
+    {
+        // Convert vector to a managed vector
+        return gcnew itkPixel( itkPixelType::RGBAUS, ManagedTypes::ToManagedRGBAPixel<unsigned short>(nativeValue) );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< class TPixel >
+    static TPixel ToNativePixel ( itkPixel^ managedPixel )
+    {
+        if (managedPixel->Type->ArrayAsEnum == itkPixelArrayEnum::Scalar)
+        {
+            switch (managedPixel->Type->TypeAsEnum)
+            {
+            case itkPixelTypeEnum::UnsignedChar:
+                return static_cast<TPixel>(managedPixel->ValueAsUC);
+            case itkPixelTypeEnum::SignedChar:
+                return static_cast<TPixel>(managedPixel->ValueAsSC);
+            case itkPixelTypeEnum::UnsignedShort:
+                return static_cast<TPixel>(managedPixel->ValueAsUS);
+            case itkPixelTypeEnum::SignedShort:
+                return static_cast<TPixel>(managedPixel->ValueAsSS);
+            case itkPixelTypeEnum::UnsignedLong:
+                return static_cast<TPixel>(managedPixel->ValueAsUL);
+            case itkPixelTypeEnum::SignedLong:
+                return static_cast<TPixel>(managedPixel->ValueAsSL);
+            case itkPixelTypeEnum::Float:
+                return static_cast<TPixel>(managedPixel->ValueAsF);
+            case itkPixelTypeEnum::Double:
+                return static_cast<TPixel>(managedPixel->ValueAsD);
+            case itkPixelTypeEnum::Boolean:
+                return static_cast<TPixel>(managedPixel->ValueAsB);
+            }// end switch
+        }
+
+        // If we get here, the pixel is not supported
+        throw gcnew NotSupportedException("The PixelType '" + managedPixel->Type->ToString() + "' is not supported by this method.");
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::RGBPixel<unsigned char> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeRGBPixel<unsigned char>( managedPixel->ValueAsArrayOfUC );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::RGBPixel<unsigned short> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeRGBPixel<unsigned short>( managedPixel->ValueAsArrayOfUS );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::RGBAPixel<unsigned char> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeRGBAPixel<unsigned char>( managedPixel->ValueAsArrayOfUC );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::RGBAPixel<unsigned short> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeRGBAPixel<unsigned short>( managedPixel->ValueAsArrayOfUS );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::Vector<unsigned char, 2> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeVector<unsigned char, 2>( managedPixel->ValueAsArrayOfUC );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::Vector<unsigned char, 3> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeVector<unsigned char, 3>( managedPixel->ValueAsArrayOfUC );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::Vector<signed char, 2> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeVector<signed char, 2>( managedPixel->ValueAsArrayOfSC );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::Vector<signed char, 3> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeVector<signed char, 3>( managedPixel->ValueAsArrayOfSC );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::Vector<unsigned short, 2> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeVector<unsigned short, 2>( managedPixel->ValueAsArrayOfUS );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::Vector<unsigned short, 3> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeVector<unsigned short, 3>( managedPixel->ValueAsArrayOfUS );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::Vector<signed short, 2> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeVector<signed short, 2>( managedPixel->ValueAsArrayOfSS );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::Vector<signed short, 3> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeVector<signed short, 3>( managedPixel->ValueAsArrayOfSS );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::Vector<float, 2> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeVector<float, 2>( managedPixel->ValueAsArrayOfF );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::Vector<float, 3> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeVector<float, 3>( managedPixel->ValueAsArrayOfF );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::Vector<double, 2> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeVector<double, 2>( managedPixel->ValueAsArrayOfD );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::Vector<double, 3> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeVector<double, 3>( managedPixel->ValueAsArrayOfD );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::CovariantVector<unsigned char, 2> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeCovariantVector<unsigned char, 2>( managedPixel->ValueAsArrayOfUC );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::CovariantVector<unsigned char, 3> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeCovariantVector<unsigned char, 3>( managedPixel->ValueAsArrayOfUC );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::CovariantVector<signed char, 2> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeCovariantVector<signed char, 2>( managedPixel->ValueAsArrayOfSC );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::CovariantVector<signed char, 3> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeCovariantVector<signed char, 3>( managedPixel->ValueAsArrayOfSC );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::CovariantVector<unsigned short, 2> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeCovariantVector<unsigned short, 2>( managedPixel->ValueAsArrayOfUS );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::CovariantVector<unsigned short, 3> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeCovariantVector<unsigned short, 3>( managedPixel->ValueAsArrayOfUS );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::CovariantVector<signed short, 2> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeCovariantVector<signed short, 2>( managedPixel->ValueAsArrayOfSS );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::CovariantVector<signed short, 3> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeCovariantVector<signed short, 3>( managedPixel->ValueAsArrayOfSS );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::CovariantVector<float, 2> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeCovariantVector<float, 2>( managedPixel->ValueAsArrayOfF );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::CovariantVector<float, 3> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeCovariantVector<float, 3>( managedPixel->ValueAsArrayOfF );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::CovariantVector<double, 2> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeCovariantVector<double, 2>( managedPixel->ValueAsArrayOfD );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::CovariantVector<double, 3> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeCovariantVector<double, 3>( managedPixel->ValueAsArrayOfD );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::VariableLengthVector<unsigned char> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeVariableLengthVector<unsigned char>( managedPixel->ValueAsArrayOfUC );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::VariableLengthVector<signed char> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeVariableLengthVector<signed char>( managedPixel->ValueAsArrayOfSC );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::VariableLengthVector<unsigned short> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeVariableLengthVector<unsigned short>( managedPixel->ValueAsArrayOfUS );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::VariableLengthVector<signed short> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeVariableLengthVector<signed short>( managedPixel->ValueAsArrayOfSS );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::VariableLengthVector<float> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeVariableLengthVector<float>( managedPixel->ValueAsArrayOfF );
+    }
+
+    ///<summary>Convert the given managed pixel to a native pixel.</summary>
+    ///<param name="managedPixel">The managed pixel to convert from.</param>
+    template< >
+    static itk::VariableLengthVector<double> ToNativePixel ( itkPixel^ managedPixel )
+    {
+        return ManagedTypes::ToNativeVariableLengthVector<double>( managedPixel->ValueAsArrayOfD );
+    }
+
+};
+
+} // end namespace itk
+
+#endif

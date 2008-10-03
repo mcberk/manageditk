@@ -1,0 +1,11 @@
+@echo off
+REM Configure the projects in @PROJECT_NAME@.sln for C++/CLI
+@MANAGED_ITK_UTILITIES_PATH@/ConfigureProject/bin/Release/ConfigureProject @CMAKE_BINARY_DIR@/@PROJECT_NAME@.sln "Release|UseOfMFC=\"0\"|UseOfMFC=\"0\" ManagedExtensions=\"1\"" "Debug|UseOfMFC=\"0\"|UseOfMFC=\"0\" ManagedExtensions=\"1\"" "MinSizeRel|UseOfMFC=\"0\"|UseOfMFC=\"0\" ManagedExtensions=\"1\"" "RelWithDebInfo|UseOfMFC=\"0\"|UseOfMFC=\"0\" ManagedExtensions=\"1\""
+@MANAGED_ITK_UTILITIES_PATH@/ConfigureProject/bin/Release/ConfigureProject @CMAKE_BINARY_DIR@/@PROJECT_NAME@.sln "Release|ExceptionHandling=\"1\"| " "Debug|ExceptionHandling=\"1\"|" "MinSizeRel|ExceptionHandling=\"1\"| " "RelWithDebInfo|ExceptionHandling=\"1\"| "
+@MANAGED_ITK_UTILITIES_PATH@/ConfigureProject/bin/Release/ConfigureProject @CMAKE_BINARY_DIR@/@PROJECT_NAME@.sln "Release|ExceptionHandling=\"FALSE\"| " "Debug|ExceptionHandling=\"FALSE\"|" "MinSizeRel|ExceptionHandling=\"FALSE\"| " "RelWithDebInfo|ExceptionHandling=\"FALSE\"| "
+@MANAGED_ITK_UTILITIES_PATH@/ConfigureProject/bin/Release/ConfigureProject @CMAKE_BINARY_DIR@/@PROJECT_NAME@.sln "Debug|BasicRuntimeChecks=\"3\"|BasicRuntimeChecks=\"0\""
+@MANAGED_ITK_UTILITIES_PATH@/ConfigureProject/bin/Release/ConfigureProject @CMAKE_BINARY_DIR@/@PROJECT_NAME@.sln "Release|Name=\"VCCLCompilerTool\"|Name=\"VCCLCompilerTool\" GenerateXMLDocumentationFiles=\"true\"" "Debug|Name=\"VCCLCompilerTool\"|Name=\"VCCLCompilerTool\" GenerateXMLDocumentationFiles=\"true\"" "MinSizeRel|Name=\"VCCLCompilerTool\"|Name=\"VCCLCompilerTool\" GenerateXMLDocumentationFiles=\"true\"" "RelWithDebInfo|Name=\"VCCLCompilerTool\"|Name=\"VCCLCompilerTool\" GenerateXMLDocumentationFiles=\"true\""
+@MANAGED_ITK_UTILITIES_PATH@/ConfigureProject/bin/Release/ConfigureProject @CMAKE_BINARY_DIR@/@PROJECT_NAME@.sln "Release|&quot;$&quot;(OutDir)|$(OutDir)" "Debug|&quot;$&quot;(OutDir)|$(OutDir)" "MinSizeRel|&quot;$&quot;(OutDir)|$(OutDir)" "RelWithDebInfo|&quot;$&quot;(OutDir)|$(OutDir)"
+
+REM Remove the file configurations for CMakeLists.txt
+@MANAGED_ITK_UTILITIES_PATH@/RemoveFileConfiguration/bin/Release/RemoveFileConfiguration @CMAKE_BINARY_DIR@/@PROJECT_NAME@.sln "CMakeLists.txt"

@@ -1,0 +1,131 @@
+/*=============================================================================
+
+NOTE: THIS FILE IS A HANDMADE WRAPPER FOR THE ManagedITK PROJECT.
+
+Project:   ManagedITK
+Program:   Insight Segmentation & Registration Toolkit
+Module:    itkManagedProcessObjectCommand.cxx
+Language:  C++/CLI
+Author:    Dan Mueller
+Date:      $Date: 2008-06-15 19:37:32 +0200 (Sun, 15 Jun 2008) $
+Revision:  $Revision: 15 $
+
+Portions of this code are covered under the ITK and VTK copyright.
+See http://www.itk.org/HTML/Copyright.htm for details.
+See http://www.vtk.org/copyright.php for details.
+
+Copyright (c) 2007-2008 Daniel Mueller
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+=============================================================================*/
+
+#pragma once
+#pragma warning( disable : 4635 ) // Disable warnings about XML doc comments
+
+#ifndef __itkManagedProcessObjectCommand_cxx
+#define __itkManagedProcessObjectCommand_cxx
+
+// Include some useful ITK headers
+#pragma unmanaged
+#include "itkCommand.h"
+#include "itkEventObject.h"
+#include "itkProcessObject.h"
+
+// Force Managed
+#pragma managed
+
+// Use System namespaces
+#using <mscorlib.dll>
+using namespace System;
+
+// Include the auto_gcroot 'smart pointer'
+#include <msclr\gcroot.h>
+using namespace msclr;
+
+// Include ManagedITK.Common
+#using <@MANAGED_ITK_ASSEMBLY_PREFIX@.Common.dll>
+
+namespace itk
+{
+
+  ///<summary>
+  ///A native itk::Command which raises managed events on the internal
+  ///managed itkProcessObject.
+  ///</summary>
+  private class itkProcessObjectCommand : public itk::Command
+  {
+  public:
+    typedef itkProcessObjectCommand		Self;
+    typedef itk::Command				Superclass;
+    typedef itk::SmartPointer<Self>		Pointer;
+    itkNewMacro( Self );
+
+    // Create a useful typedef for the managed object pointer
+    // NOTE: This is NOT auto_gcroot because we don't want to
+    //		 release the managed object when the Command
+    //		 pointer is removed and/or goes out of scope.
+    typedef gcroot<itkProcessObject^> PointerToManagedObjectType;
+
+  protected:
+    itkProcessObjectCommand(){};
+    ~itkProcessObjectCommand(){};
+
+  private:
+    PointerToManagedObjectType m_PointerToManagedObject;
+
+  public:
+
+    /** Method: Set the managed object for which the events should be 
+    * passed along to. 
+    */
+    void SetManagedObject(PointerToManagedObjectType ptrManagedObject)
+    {
+      this->m_PointerToManagedObject = ptrManagedObject;
+    }
+
+    /** Called when the native ITK event is raised. */
+    void Execute(itk::Object *caller, const itk::EventObject & event)
+    {
+      // Cast caller to ProcessObject
+      itk::ProcessObject::Pointer process = dynamic_cast<itk::ProcessObject*>(caller);
+
+      // Raise the corresponding managed event
+      if (itk::ProgressEvent().CheckEvent(&event))
+        this->m_PointerToManagedObject->InvokeProgressEvent( gcnew itk::itkProgressEventArgs(process->GetProgress()) );
+      else if (itk::StartEvent().CheckEvent(&event))
+        this->m_PointerToManagedObject->InvokeStartedEvent( gcnew itk::itkEventArgs() );
+      else if (itk::EndEvent().CheckEvent(&event))
+        this->m_PointerToManagedObject->InvokeEndedEvent( gcnew itk::itkEventArgs() );
+      else if (itk::AbortEvent().CheckEvent(&event))
+        this->m_PointerToManagedObject->InvokeAbortedEvent( gcnew itk::itkEventArgs() );
+      else if (itk::IterationEvent().CheckEvent(&event))
+        this->m_PointerToManagedObject->InvokeIterationEvent( gcnew itk::itkEventArgs() );
+      else if (itk::ModifiedEvent().CheckEvent(&event))
+        this->m_PointerToManagedObject->InvokeModifiedEvent( gcnew itk::itkEventArgs() );
+    }
+
+    void Execute(const itk::Object *caller, const itk::EventObject & event)
+    { return; }
+
+  };
+
+} // end namespace itk
+
+#endif

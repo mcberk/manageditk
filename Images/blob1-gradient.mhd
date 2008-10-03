@@ -1,0 +1,15 @@
+ObjectType = Image
+NDims = 3
+BinaryData = True
+BinaryDataByteOrderMSB = False
+CompressedData = True
+CompressedDataSize = 504278
+TransformMatrix = 1 0 0 0 1 0 0 0 1
+Offset = 0 0 0
+CenterOfRotation = 0 0 0
+AnatomicalOrientation = RAI
+ElementSpacing = 1 1 1
+DimSize = 40 40 40
+ElementNumberOfChannels = 3
+ElementType = MET_FLOAT
+ElementDataFile = blob1-gradient.zraw

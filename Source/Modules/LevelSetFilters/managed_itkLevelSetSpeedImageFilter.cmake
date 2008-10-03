@@ -1,0 +1,62 @@
+WRAP_CLASS("itk::LevelSetSpeedImageFilter")
+
+  WRAP_IMAGE_FILTER_REAL(2)
+
+  BEGIN_MANAGED_PROPERTY("GaussianNormalizeAcrossScale" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set if the gaussian is normalized across the scale.")
+    SET(MANAGED_PROPERTY_TYPE      "bool")
+    SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetGaussianNormalizeAcrossScale();")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetGaussianNormalizeAcrossScale( value );")
+  END_MANAGED_PROPERTY()
+  
+  BEGIN_MANAGED_PROPERTY("GaussianSigma" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the sigma value for the gradient magnitude.")
+    SET(MANAGED_PROPERTY_TYPE      "double")
+    SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetGaussianSigma();")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetGaussianSigma( value );")
+  END_MANAGED_PROPERTY()
+  
+  BEGIN_MANAGED_PROPERTY("SigmoidAlpha" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the sigmoid alpha value.")
+    SET(MANAGED_PROPERTY_TYPE      "double")
+    SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetSigmoidAlpha();")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetSigmoidAlpha( value );")
+  END_MANAGED_PROPERTY()
+  
+  BEGIN_MANAGED_PROPERTY("SigmoidBeta" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the sigmoid beta value.")
+    SET(MANAGED_PROPERTY_TYPE      "double")
+    SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetSigmoidBeta();")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetSigmoidBeta( value );")
+  END_MANAGED_PROPERTY()
+  
+  BEGIN_MANAGED_PROPERTY("ThresholdLower" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the lower threshold value. Values outside of this range are ignored.")
+    SET(MANAGED_PROPERTY_TYPE      "itkPixel^")
+    SET(MANAGED_PROPERTY_GET_BODY  "return itk::ManagedTypes::ToManagedPixel<NativeType::InputImagePixelType>( m_PointerToNative->GetThresholdLower() );")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetThresholdLower( itk::ManagedTypes::ToNativePixel<NativeType::InputImagePixelType>(value) );")
+  END_MANAGED_PROPERTY()
+
+  BEGIN_MANAGED_PROPERTY("ThresholdUpper" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the upper threshold value. Values outside of this range are ignored.")
+    SET(MANAGED_PROPERTY_TYPE      "itkPixel^")
+    SET(MANAGED_PROPERTY_GET_BODY  "return itk::ManagedTypes::ToManagedPixel<NativeType::InputImagePixelType>( m_PointerToNative->GetThresholdUpper() );")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetThresholdUpper( itk::ManagedTypes::ToNativePixel<NativeType::InputImagePixelType>(value) );")
+  END_MANAGED_PROPERTY()
+  
+  BEGIN_MANAGED_PROPERTY("OutputMinimum" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the minimum output value. Should be -1.0 for level sets or 0.0 for fast marching.")
+    SET(MANAGED_PROPERTY_TYPE      "itkPixel^")
+    SET(MANAGED_PROPERTY_GET_BODY  "return itk::ManagedTypes::ToManagedPixel<NativeType::OutputImagePixelType>( m_PointerToNative->GetOutputMinimum() );")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetOutputMinimum( itk::ManagedTypes::ToNativePixel<NativeType::OutputImagePixelType>(value) );")
+  END_MANAGED_PROPERTY()
+
+  BEGIN_MANAGED_PROPERTY("OutputMaximum" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the maximum output value. Should be 1.0 for level sets and 1.0 for fast marching.")
+    SET(MANAGED_PROPERTY_TYPE      "itkPixel^")
+    SET(MANAGED_PROPERTY_GET_BODY  "return itk::ManagedTypes::ToManagedPixel<NativeType::OutputImagePixelType>( m_PointerToNative->GetOutputMaximum() );")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetOutputMaximum( itk::ManagedTypes::ToNativePixel<NativeType::OutputImagePixelType>(value) );")
+  END_MANAGED_PROPERTY()
+
+END_WRAP_CLASS()
+

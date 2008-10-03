@@ -1,0 +1,91 @@
+################################################################################
+# Set ITK directory
+################################################################################
+SET(possible_itk_dir "@ITK_DIR@")
+IF(EXISTS "${possible_itk_dir}")
+SET(ITK_DIR "${possible_itk_dir}" CACHE PATH "Path to ITK build or install.")
+ENDIF(EXISTS "${possible_itk_dir}")
+#-------------------------------------------------------------------------------
+
+################################################################################
+# Set ManagedITK paths and files
+################################################################################
+SET(MANAGED_ITK_CMAKE_PATH "@MANAGED_ITK_CMAKE_PATH@")
+SET(MANAGED_ITK_SOURCE_PATH "@MANAGED_ITK_SOURCE_PATH@")
+SET(MANAGED_ITK_IMAGES_PATH "@MANAGED_ITK_IMAGES_PATH@")
+SET(MANAGED_ITK_TESTING_PATH "@MANAGED_ITK_TESTING_PATH@")
+SET(MANAGED_ITK_EXAMPLES_PATH "@MANAGED_ITK_EXAMPLES_PATH@")
+SET(MANAGED_ITK_UTILITIES_PATH "@MANAGED_ITK_UTILITIES_PATH@")
+
+SET(MANAGED_ITK_SOURCE_OUTPUT_PATH "@MANAGED_ITK_SOURCE_OUTPUT_PATH@")
+SET(MANAGED_ITK_SOURCE_COMMON_PATH "@MANAGED_ITK_SOURCE_COMMON_PATH@")
+SET(MANAGED_ITK_SOURCE_MODULES_PATH "@MANAGED_ITK_SOURCE_MODULES_PATH@")
+SET(MANAGED_ITK_SOURCE_SHARPIMAGE_PATH "@MANAGED_ITK_SOURCE_SHARPIMAGE_PATH@")
+SET(MANAGED_ITK_SOURCE_REFERENCES_PATH "@MANAGED_ITK_SOURCE_REFERENCES_PATH@")
+
+SET(MANAGED_ITK_SOURCE_BUILD_PATH "@MANAGED_ITK_SOURCE_BUILD_PATH@")
+SET(MANAGED_ITK_SOURCE_COMMON_BUILD_PATH "@MANAGED_ITK_SOURCE_COMMON_BUILD_PATH@")
+SET(MANAGED_ITK_SOURCE_MODULES_BUILD_PATH "@MANAGED_ITK_SOURCE_MODULES_BUILD_PATH@")
+SET(MANAGED_ITK_SOURCE_SHARPIMAGE_BUILD_PATH "@MANAGED_ITK_SOURCE_SHARPIMAGE_BUILD_PATH@")
+SET(MANAGED_ITK_SOURCE_REFERENCES_BUILD_PATH "@MANAGED_ITK_SOURCE_REFERENCES_BUILD_PATH@")
+
+SET(MANAGED_ITK_VXL_INCLUDE_DIRS "@MANAGED_ITK_VXL_INCLUDE_DIRS@")
+
+SET(MANAGED_ITK_USE_FILE "@MANAGED_ITK_USE_FILE@")
+#-------------------------------------------------------------------------------
+
+################################################################################
+# Set ManagedITK variables
+################################################################################
+SET(WRAP_unsigned_char @WRAP_unsigned_char@ CACHE BOOL "Wrap unsigned char type")
+SET(WRAP_unsigned_short @WRAP_unsigned_short@ CACHE BOOL "Wrap unsigned short type")
+SET(WRAP_unsigned_long @WRAP_unsigned_long@ CACHE BOOL "Wrap unsigned long type")
+
+SET(WRAP_signed_char @WRAP_signed_char@ CACHE BOOL "Wrap signed char type")
+SET(WRAP_signed_short @WRAP_signed_short@ CACHE BOOL "Wrap signed short type")
+SET(WRAP_signed_long @WRAP_signed_long@ CACHE BOOL "Wrap signed long type")
+
+SET(WRAP_float @WRAP_float@ CACHE BOOL "Wrap float type")
+SET(WRAP_double @WRAP_double@ CACHE BOOL "Wrap double type")
+
+SET(WRAP_vector @WRAP_vector@ CACHE BOOL "Wrap vector type")
+SET(WRAP_covariant_vector @WRAP_covariant@ CACHE BOOL "Wrap covariant vector type")
+
+SET(WRAP_rgb_unsigned_char @WRAP_rgb_unsigned_char@ CACHE BOOL "Wrap RGB< unsigned char > type")
+SET(WRAP_rgb_unsigned_short @WRAP_rgb_unsigned_short@ CACHE BOOL "Wrap RGB< unsigned short > type")
+SET(WRAP_rgba_unsigned_char @WRAP_rgba_unsigned_char@ CACHE BOOL "Wrap RGBA< unsigned char > type")
+SET(WRAP_rgba_unsigned_short @WRAP_rgba_unsigned_short@ CACHE BOOL "Wrap RGBA< unsigned short > type")
+
+SET(WRAP_dimensions "@WRAP_dimensions@" CACHE STRING "Dimensions available separated by semicolons (;)")
+SET(WRAP_ITK_DIMS "@WRAP_dimensions@")
+#-------------------------------------------------------------------------------
+
+################################################################################
+# Mark the ManagedITK variables as advanced
+################################################################################
+FOREACH(var ITK_DIR
+            WRAP_unsigned_char WRAP_unsigned_short WRAP_unsigned_long 
+            WRAP_signed_char WRAP_signed_short WRAP_signed_long
+            WRAP_float WRAP_double 
+            WRAP_vector WRAP_covariant_vector
+            WRAP_rgb_unsigned_char WRAP_rgb_unsigned_short 
+            WRAP_rgba_unsigned_char WRAP_rgba_unsigned_short 
+            WRAP_dimensions)
+  MARK_AS_ADVANCED(${var})
+ENDFOREACH(var)
+#-------------------------------------------------------------------------------
+
+################################################################################
+# Include required ManagedITK CMake files
+################################################################################
+INCLUDE("@MANAGED_ITK_SOURCE_PATH@/CMakeUtilityFunctions.cmake")
+INCLUDE("@MANAGED_ITK_SOURCE_PATH@/WrapUtilityFunctions.cmake")
+INCLUDE("@MANAGED_ITK_SOURCE_PATH@/WrapBasicTypes.cmake")
+INCLUDE("@MANAGED_ITK_SOURCE_PATH@/WrapITKTypes.cmake")
+INCLUDE("@MANAGED_ITK_SOURCE_PATH@/WrapCodeGen.cmake")
+INCLUDE("@MANAGED_ITK_SOURCE_PATH@/WrapExternalProject.cmake")
+#-------------------------------------------------------------------------------
+
+
+# Tell the world that this is an external project using ManagedITK
+SET(EXTERNAL_MANAGED_ITK_PROJECT ON)

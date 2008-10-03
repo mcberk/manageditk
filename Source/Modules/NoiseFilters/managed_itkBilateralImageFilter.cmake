@@ -1,0 +1,40 @@
+WRAP_CLASS("itk::BilateralImageFilter")
+
+  WRAP_IMAGE_FILTER_REAL(2)
+
+  BEGIN_MANAGED_PROPERTY("DomainSigma" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the Gaussian kernel sigma for the image domain.")
+    SET(MANAGED_PROPERTY_TYPE      "array<double>^")
+    SET(MANAGED_PROPERTY_GET_BODY  "return itk::ManagedTypes::ToManagedFixedArray<double, NativeType::ImageDimension>( m_PointerToNative->GetDomainSigma() );")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetDomainSigma( itk::ManagedTypes::ToNativeFixedArray<double, NativeType::ImageDimension>(value) );")
+  END_MANAGED_PROPERTY()
+
+  BEGIN_MANAGED_PROPERTY("RangeSigma" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the Gaussian kernel sigma for the image range.")
+    SET(MANAGED_PROPERTY_TYPE      "double")
+    SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetRangeSigma();")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetRangeSigma( value );")
+  END_MANAGED_PROPERTY()
+  
+  BEGIN_MANAGED_PROPERTY("AutomaticKernelSize" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the Gaussian kernel size determination. When automatic is 'on', the kernel size is a function of the domain sigma. When automatic is 'off', the kernel size is whatever is specified by the user.")
+    SET(MANAGED_PROPERTY_TYPE      "bool")
+    SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetAutomaticKernelSize();")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetAutomaticKernelSize( value );")
+  END_MANAGED_PROPERTY()
+  
+  BEGIN_MANAGED_PROPERTY("Radius" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the kernel radius, specified in pixels. This parameter is used only when AutomaticNeighborhoodSize is 'off'.")
+    SET(MANAGED_PROPERTY_TYPE      "itkSize^")
+    SET(MANAGED_PROPERTY_GET_BODY  "return itk::ManagedTypes::ToManagedSize<NativeType::ImageDimension>( m_PointerToNative->GetRadius() );")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetRadius( itk::ManagedTypes::ToNativeSize<NativeType::ImageDimension>(value) );")
+  END_MANAGED_PROPERTY()
+
+  BEGIN_MANAGED_PROPERTY("NumberOfRangeGaussianSamples" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the number of samples in the approximation to the Gaussian used for the range smoothing. Samples are only generated in the range of [0, 4*m_RangeSigma]. Default is 100.")
+    SET(MANAGED_PROPERTY_TYPE      "unsigned long")
+    SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetNumberOfRangeGaussianSamples();")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetNumberOfRangeGaussianSamples( value );")
+  END_MANAGED_PROPERTY()
+
+END_WRAP_CLASS()

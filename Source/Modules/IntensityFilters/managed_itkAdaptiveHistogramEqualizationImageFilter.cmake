@@ -1,0 +1,35 @@
+WRAP_CLASS("itk::AdaptiveHistogramEqualizationImageFilter")
+
+  WRAP_IMAGE_FILTER_USIGN_INT(1)
+  WRAP_IMAGE_FILTER_SIGN_INT(1)
+  WRAP_IMAGE_FILTER_REAL(1)
+  
+  BEGIN_MANAGED_PROPERTY("Alpha" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the value of alpha. Alpha=0 produces the adaptive histogram equalization (provided beta=0). Alpha=1 produces an unsharp mask. Default is 0.3.")
+    SET(MANAGED_PROPERTY_TYPE      "double")
+    SET(MANAGED_PROPERTY_GET_BODY  "return static_cast<double>( m_PointerToNative->GetAlpha() );")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetAlpha( static_cast<float>(value) );")
+  END_MANAGED_PROPERTY()
+  
+  BEGIN_MANAGED_PROPERTY("Beta" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the value of beta. If beta=1 (and alpha=1), then the output image matches the input image. As beta approaches 0, the filter behaves as an unsharp mask. Default is 0.3.")
+    SET(MANAGED_PROPERTY_TYPE      "double")
+    SET(MANAGED_PROPERTY_GET_BODY  "return static_cast<double>( m_PointerToNative->GetBeta() );")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetBeta( static_cast<float>(value) );")
+  END_MANAGED_PROPERTY()
+  
+  BEGIN_MANAGED_PROPERTY("Radius" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the radius of the neighborhood used to compute local statistics. Radius sizes of 10 and 20 are common. Default is a radius of 5.")
+    SET(MANAGED_PROPERTY_TYPE      "itkSize^")
+    SET(MANAGED_PROPERTY_GET_BODY  "return itk::ManagedTypes::ToManagedSize<NativeType::ImageDimension>( m_PointerToNative->GetRadius() );")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetRadius( itk::ManagedTypes::ToNativeSize<NativeType::ImageDimension>(value) );")
+  END_MANAGED_PROPERTY()
+  
+  BEGIN_MANAGED_PROPERTY("UseLookupTable" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set whether an optimized lookup table for the intensity mapping function is used. Default is off.")
+    SET(MANAGED_PROPERTY_TYPE      "bool")
+    SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetUseLookupTable();")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetUseLookupTable(value);")
+  END_MANAGED_PROPERTY()
+
+END_WRAP_CLASS()

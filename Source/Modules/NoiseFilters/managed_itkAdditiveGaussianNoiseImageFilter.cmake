@@ -1,0 +1,41 @@
+WRAP_CLASS("itk::AdditiveGaussianNoiseImageFilter")
+
+  WRAP_IMAGE_FILTER_USIGN_INT(1)
+  WRAP_IMAGE_FILTER_SIGN_INT(1)
+  WRAP_IMAGE_FILTER_REAL(1)
+
+  BEGIN_MANAGED_PROPERTY("Mean" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the average noise added to the image per pixel. The default is 0.")
+    SET(MANAGED_PROPERTY_TYPE      "float")
+    SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetMean();")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetMean( value );")
+  END_MANAGED_PROPERTY()
+
+  BEGIN_MANAGED_PROPERTY("StandardDeviation" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the standard deviation of the noise added to the image per pixel. The default is 1.")
+    SET(MANAGED_PROPERTY_TYPE      "float")
+    SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetStandardDeviation();")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetStandardDeviation( value );")
+  END_MANAGED_PROPERTY()
+
+  BEGIN_MANAGED_PROPERTY("Seed" SET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Set the seed for the normal variate generator. The same seed will produce the same pseduo-random sequence, which can be used to reproduce results. For a higher dose of entropy, initialise with the current system time (in ms).")
+    SET(MANAGED_PROPERTY_TYPE      "unsigned long")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetSeed( value );")
+  END_MANAGED_PROPERTY()
+  
+  BEGIN_MANAGED_PROPERTY("OutputMinimum" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the output minimum value.")
+    SET(MANAGED_PROPERTY_TYPE      "itkPixel^")
+    SET(MANAGED_PROPERTY_GET_BODY  "return itk::ManagedTypes::ToManagedPixel<NativeType::InputPixelType>( m_PointerToNative->GetOutputMinimum() );")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetOutputMinimum( itk::ManagedTypes::ToNativePixel<NativeType::InputPixelType>( value ) );")
+  END_MANAGED_PROPERTY()
+  
+  BEGIN_MANAGED_PROPERTY("OutputMaximum" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the output maximum value.")
+    SET(MANAGED_PROPERTY_TYPE      "itkPixel^")
+    SET(MANAGED_PROPERTY_GET_BODY  "return itk::ManagedTypes::ToManagedPixel<NativeType::InputPixelType>( m_PointerToNative->GetOutputMaximum() );")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetOutputMaximum( itk::ManagedTypes::ToNativePixel<NativeType::InputPixelType>( value ) );")
+  END_MANAGED_PROPERTY()
+
+END_WRAP_CLASS()

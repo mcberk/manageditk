@@ -1,0 +1,16 @@
+WRAP_CLASS("itk::QuadEdgeMesh")
+
+  WRAP_INCLUDE_TYPE("itkDefaultStaticMeshTraits.h")
+  WRAP_INCLUDE_TYPE("itkDefaultDynamicMeshTraits.h")
+
+  SET(MANAGED_TYPE_TEMPLATE ${MANAGED_ITK_SOURCE_COMMON_PATH}/itkManagedMesh_TYPE.cxx.in)
+  SET(MANAGED_WRAPPER_TEMPLATE ${MANAGED_ITK_SOURCE_COMMON_PATH}/itkManagedMesh_WRAPPER.cxx.in)
+  SET(MANGLED_PREFIX "QE")
+
+  FOREACH(d "3")
+    FOREACH(t ${WRAP_ITK_MESH_PIXELS})
+      WRAP_TEMPLATE("${t}${d}" "${ITKT_${t}},${d}")
+    ENDFOREACH(t)
+  ENDFOREACH(d)
+
+END_WRAP_CLASS()
