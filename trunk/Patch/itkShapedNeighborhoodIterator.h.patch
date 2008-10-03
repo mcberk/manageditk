@@ -1,0 +1,8 @@
+220,221c220,223
+<   Superclass::SetPixel;
+<   Superclass::SetCenterPixel;
+---
+>   virtual void SetPixel(const unsigned i, const PixelType &v, bool  &status) { Superclass::SetPixel(i, v, status); }
+>   virtual void SetPixel(const unsigned i, const PixelType &v) { Superclass::SetPixel(i, v); }
+>   virtual void SetPixel(const OffsetType o, const PixelType &v) { Superclass::SetPixel(o, v); }
+>   virtual void SetCenterPixel(const PixelType &p) { Superclass::SetCenterPixel(p); }

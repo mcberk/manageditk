@@ -1,0 +1,47 @@
+WRAP_CLASS("itk::MattesMutualInformationImageToImageMetric")
+
+  SET(MANAGED_TYPE_TEMPLATE ${MANAGED_ITK_SOURCE_COMMON_PATH}/itkManagedImageToImageMetric_TYPE.cxx.in)
+  SET(MANAGED_WRAPPER_TEMPLATE ${MANAGED_ITK_SOURCE_COMMON_PATH}/itkManagedImageToImageMetric_WRAPPER.cxx.in)
+
+  WRAP_IMAGE_FILTER_USIGN_INT(2 2+)
+  WRAP_IMAGE_FILTER_SIGN_INT(2 2+)
+  WRAP_IMAGE_FILTER_REAL(2 2+)
+  
+  BEGIN_MANAGED_PROPERTY("NumberOfSpatialSamples" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the number of spatial samples to used to compute metric.")
+    SET(MANAGED_PROPERTY_TYPE      "unsigned long")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetNumberOfSpatialSamples( value );")
+    SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetNumberOfSpatialSamples();")
+  END_MANAGED_PROPERTY()
+
+  BEGIN_MANAGED_PROPERTY("NumberOfHistogramBins" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the number of bins to used in the histogram. Typical value is 50.")
+    SET(MANAGED_PROPERTY_TYPE      "unsigned long")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetNumberOfHistogramBins( value );")
+    SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetNumberOfHistogramBins();")
+  END_MANAGED_PROPERTY()
+  
+  BEGIN_MANAGED_PROPERTY("UseAllPixels" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set whether the metric will be computed using all the pixels on the fixed image region, or only using a set of randomly selected pixels.")
+    SET(MANAGED_PROPERTY_TYPE      "bool")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetUseAllPixels( value );")
+    SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetUseAllPixels();")
+  END_MANAGED_PROPERTY()
+  
+  BEGIN_MANAGED_METHOD("ReinitializeSeed")
+    SET(MANAGED_METHOD_SUMMARY         "Reinitialize the seed of the random number generator.")
+    SET(MANAGED_METHOD_RETURN_TYPE     "void")
+    SET(MANAGED_METHOD_PARAMS          "void")
+    SET(MANAGED_METHOD_TYPE_BODY       "m_PointerToNative->ReinitializeSeed( );")
+    SET(MANAGED_METHOD_WRAPPER_BODY    "iInstance->ReinitializeSeed( );")
+  END_MANAGED_METHOD()
+
+  BEGIN_MANAGED_METHOD("ReinitializeSeed")
+    SET(MANAGED_METHOD_SUMMARY         "Reinitialize the seed of the random number generator.")
+    SET(MANAGED_METHOD_RETURN_TYPE     "void")
+    SET(MANAGED_METHOD_PARAMS          "int seed")
+    SET(MANAGED_METHOD_TYPE_BODY       "m_PointerToNative->ReinitializeSeed( seed );")
+    SET(MANAGED_METHOD_WRAPPER_BODY    "iInstance->ReinitializeSeed( seed );")
+  END_MANAGED_METHOD()
+
+END_WRAP_CLASS()

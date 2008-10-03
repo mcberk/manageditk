@@ -1,0 +1,57 @@
+WRAP_CLASS("itk::CannyEdgeDetectionImageFilter")
+
+  WRAP_IMAGE_FILTER_REAL(2 2+)
+
+  BEGIN_MANAGED_PROPERTY("Variance" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the variance parameter used by the Gaussian smoothing filter in this algorithm.")
+    SET(MANAGED_PROPERTY_TYPE      "array<double>^")
+    SET(MANAGED_PROPERTY_GET_BODY  "return itk::ManagedTypes::ToManagedFixedArray<double, NativeType::ImageDimension>( m_PointerToNative->GetVariance() );")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetVariance( itk::ManagedTypes::ToNativeFixedArray<double, NativeType::ImageDimension>(value) );")
+  END_MANAGED_PROPERTY()
+  
+  BEGIN_MANAGED_METHOD("SetVariance")
+    SET(MANAGED_METHOD_SUMMARY         "Convenient method for setting the Variance parameter for all dimensional parameters to the same value.")
+    SET(MANAGED_METHOD_RETURN_TYPE     "void")
+    SET(MANAGED_METHOD_PARAMS          "double variance")
+    SET(MANAGED_METHOD_TYPE_BODY       "m_PointerToNative->SetVariance( variance );")
+    SET(MANAGED_METHOD_WRAPPER_BODY    "iInstance->SetVariance( variance );")
+  END_MANAGED_METHOD()
+
+  BEGIN_MANAGED_PROPERTY("MaximumError" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the MaximumError paramter used by the Gaussian smoothing filter in this algorithm.")
+    SET(MANAGED_PROPERTY_TYPE      "array<double>^")
+    SET(MANAGED_PROPERTY_GET_BODY  "return itk::ManagedTypes::ToManagedFixedArray<double, NativeType::ImageDimension>( m_PointerToNative->GetMaximumError() );")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetMaximumError( itk::ManagedTypes::ToNativeFixedArray<double, NativeType::ImageDimension>(value) );")
+  END_MANAGED_PROPERTY()
+  
+  BEGIN_MANAGED_METHOD("SetMaximumError")
+    SET(MANAGED_METHOD_SUMMARY         "Convenient method for setting the MaximumError parameter for all dimensional parameters to the same value.")
+    SET(MANAGED_METHOD_RETURN_TYPE     "void")
+    SET(MANAGED_METHOD_PARAMS          "double maxerror")
+    SET(MANAGED_METHOD_TYPE_BODY       "m_PointerToNative->SetMaximumError( maxerror );")
+    SET(MANAGED_METHOD_WRAPPER_BODY    "iInstance->SetMaximumError( maxerror );")
+  END_MANAGED_METHOD()
+  
+  BEGIN_MANAGED_PROPERTY("UpperThreshold" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set upper threshold value for detected edges.")
+    SET(MANAGED_PROPERTY_TYPE      "itkPixel^")
+    SET(MANAGED_PROPERTY_GET_BODY  "return itk::ManagedTypes::ToManagedPixel<NativeType::OutputImagePixelType>( m_PointerToNative->GetUpperThreshold() );")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetUpperThreshold( itk::ManagedTypes::ToNativePixel<NativeType::OutputImagePixelType>( value ) );")
+  END_MANAGED_PROPERTY()
+  
+  BEGIN_MANAGED_PROPERTY("LowerThreshold" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set lower threshold value for detected edges.")
+    SET(MANAGED_PROPERTY_TYPE      "itkPixel^")
+    SET(MANAGED_PROPERTY_GET_BODY  "return itk::ManagedTypes::ToManagedPixel<NativeType::OutputImagePixelType>( m_PointerToNative->GetLowerThreshold() );")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetLowerThreshold( itk::ManagedTypes::ToNativePixel<NativeType::OutputImagePixelType>( value ) );")
+  END_MANAGED_PROPERTY()
+  
+  BEGIN_MANAGED_PROPERTY("OutsideValue" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the value for all pixels outside the given range.")
+    SET(MANAGED_PROPERTY_TYPE      "itkPixel^")
+    SET(MANAGED_PROPERTY_GET_BODY  "return itk::ManagedTypes::ToManagedPixel<NativeType::OutputImagePixelType>( m_PointerToNative->GetOutsideValue() );")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetOutsideValue( itk::ManagedTypes::ToNativePixel<NativeType::OutputImagePixelType>( value ) );")
+  END_MANAGED_PROPERTY()
+
+END_WRAP_CLASS()
+

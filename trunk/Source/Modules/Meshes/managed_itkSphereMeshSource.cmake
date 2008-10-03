@@ -1,0 +1,58 @@
+WRAP_CLASS("itk::SphereMeshSource")
+
+  WRAP_INCLUDE_TYPE("itkDefaultStaticMeshTraits.h")
+  WRAP_INCLUDE_TYPE("itkDefaultDynamicMeshTraits.h")
+
+  SET(MANAGED_TYPE_TEMPLATE ${MANAGED_ITK_SOURCE_COMMON_PATH}/itkManagedMeshSource_TYPE.cxx.in)
+  SET(MANAGED_WRAPPER_TEMPLATE ${MANAGED_ITK_SOURCE_COMMON_PATH}/itkManagedMeshSource_WRAPPER.cxx.in)
+
+  FOREACH(d "3")
+    FOREACH(t ${WRAP_ITK_MESH_PIXELS})
+      WRAP_TEMPLATE("${ITKM_M${t}${d}S}"  "${ITKT_M${t}${d}S}")
+      WRAP_TEMPLATE("${ITKM_M${t}${d}D}"  "${ITKT_M${t}${d}D}")
+    ENDFOREACH(t)
+  ENDFOREACH(d)
+
+  BEGIN_MANAGED_PROPERTY("ResolutionX" SET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Set the resolution in the x-axis.")
+    SET(MANAGED_PROPERTY_TYPE      "unsigned int")
+    SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetResolutionX();")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetResolutionX( value );")
+  END_MANAGED_PROPERTY()
+
+  BEGIN_MANAGED_PROPERTY("ResolutionY" SET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Set the resolution in the y-axis.")
+    SET(MANAGED_PROPERTY_TYPE      "unsigned int")
+    SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetResolutionY();")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetResolutionY( value );")
+  END_MANAGED_PROPERTY()
+  
+  BEGIN_MANAGED_PROPERTY("Squareness1" SET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Set the Squareness1 parameter.")
+    SET(MANAGED_PROPERTY_TYPE      "double")
+    SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetSquareness1();")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetSquareness1( value );")
+  END_MANAGED_PROPERTY()
+
+  BEGIN_MANAGED_PROPERTY("Squareness2" SET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Set the Squareness1 parameter.")
+    SET(MANAGED_PROPERTY_TYPE      "double")
+    SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetSquareness2();")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetSquareness2( value );")
+  END_MANAGED_PROPERTY()
+  
+  BEGIN_MANAGED_PROPERTY("Center" SET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Set the center of the output sphere.")
+    SET(MANAGED_PROPERTY_TYPE      "itkPoint^")
+    SET(MANAGED_PROPERTY_GET_BODY  "return itk::ManagedTypes::ToManagedPoint<NativeType::OutputMeshType::PointDimension>( m_PointerToNative->GetCenter() );")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetCenter( itk::ManagedTypes::ToNativePoint<NativeType::OutputMeshType::PointDimension>(value) );")
+  END_MANAGED_PROPERTY()
+
+  BEGIN_MANAGED_PROPERTY("Scale" SET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Set the scaling of the output sphere.")
+    SET(MANAGED_PROPERTY_TYPE      "itkPoint^")
+    SET(MANAGED_PROPERTY_GET_BODY  "return itk::ManagedTypes::ToManagedPoint<NativeType::OutputMeshType::PointDimension>( m_PointerToNative->GetScale() );")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetScale( itk::ManagedTypes::ToNativePoint<NativeType::OutputMeshType::PointDimension>(value) );")
+  END_MANAGED_PROPERTY()
+
+END_WRAP_CLASS()

@@ -1,0 +1,73 @@
+234,263c234,265
+<   Superclass::GetImagePointer;
+<   Superclass::GetRadius;
+<   Superclass::GetIndex;
+<   Superclass::GetNeighborhoodIndex;
+<   Superclass::GetCenterNeighborhoodIndex;
+<   Superclass::GetRegion;
+<   Superclass::GetBeginIndex;
+<   Superclass::GoToBegin;
+<   Superclass::GoToEnd;
+<   Superclass::IsAtBegin;
+<   Superclass::IsAtEnd;
+<   Superclass::GetOffset;
+<   Superclass::operator==;
+<   Superclass::operator!=;
+<   Superclass::operator<;
+<   Superclass::operator>;
+<   Superclass::operator>=;
+<   Superclass::operator<=;
+<   Superclass::operator[];
+<   Superclass::GetElement;
+<   Superclass::SetLocation;
+<   Superclass::GetCenterPointer;
+<   Superclass::GetCenterPixel;
+<   Superclass::OverrideBoundaryCondition;
+<   Superclass::ResetBoundaryCondition;
+<   Superclass::GetBoundaryCondition;
+<   Superclass::Print;
+<   Superclass::operator-;
+<  
+<   Superclass::GetPixel;
+---
+>   const ImageType * GetImagePointer(void) const { return Superclass::GetImagePointer(); }
+>   const SizeType GetRadius() const { return Superclass::GetRadius(); }
+>   virtual IndexType GetIndex(void) const { return Superclass::GetIndex(); }
+>   virtual IndexType GetIndex(const OffsetType &o) const { return Superclass::GetIndex(o); }
+>   virtual IndexType GetIndex(const unsigned i) const { return Superclass::GetIndex(i); }
+>   virtual unsigned int GetNeighborhoodIndex(const OffsetType & o) const { return Superclass::GetNeighborhoodIndex(o); }
+>   unsigned int GetCenterNeighborhoodIndex() const { return Superclass::GetCenterNeighborhoodIndex(); }
+>   RegionType GetRegion() const { return Superclass::GetRegion(); }
+>   IndexType GetBeginIndex() const { return Superclass::GetBeginIndex(); }
+>   virtual void GoToBegin() { Superclass::GoToBegin(); }
+>   virtual void GoToEnd() { Superclass::GoToEnd(); }
+>   virtual bool IsAtBegin() const { return Superclass::IsAtBegin(); }
+>   virtual bool IsAtEnd() const { return Superclass::IsAtEnd(); }
+>   OffsetType GetOffset(unsigned int i) const { return Superclass::GetOffset(i); }
+>   //Superclass::operator==;
+>   //Superclass::operator!=;
+>   //Superclass::operator<;
+>   //Superclass::operator>;
+>   //Superclass::operator>=;
+>   //Superclass::operator<=;
+>   //Superclass::operator[];
+>   //TPixel& GetElement(unsigned int i) { return Superclass::GetElement(i); }
+>   void SetLocation( const IndexType& position ) { Superclass::SetLocation(position); }
+>   const InternalPixelType *GetCenterPointer() const { return Superclass::GetCenterPointer(); }
+>   InternalPixelType *GetCenterPointer() { return Superclass::GetCenterPointer(); }
+>   PixelType GetCenterPixel() const { return Superclass::GetCenterPixel(); }
+>   virtual void OverrideBoundaryCondition(const ImageBoundaryConditionPointerType i) { Superclass::OverrideBoundaryCondition(i); }
+>   virtual void ResetBoundaryCondition() { Superclass::ResetBoundaryCondition(); }
+>   const BoundaryConditionType *GetBoundaryCondition() const { Superclass::GetBoundaryCondition(); }
+>   void Print(std::ostream& os) const { Superclass::Print(os); }
+>   //Superclass::operator-;
+>   virtual PixelType GetPixel(const unsigned i) const { return Superclass::GetPixel(i); }  
+326,327c328,332
+<   Superclass::SetPixel;
+<   Superclass::SetCenterPixel;
+---
+>   virtual void SetPixel(const unsigned i, const PixelType &v, bool  &status) { Superclass::SetPixel(i, v, status); }
+>   virtual void SetPixel(const unsigned i, const PixelType &v) { Superclass::SetPixel(i, v); }
+>   virtual void SetPixel(const OffsetType o, const PixelType &v) { Superclass::SetPixel(o, v); }
+>   virtual void SetCenterPixel(const PixelType &p) { Superclass::SetCenterPixel(p); }
+>   

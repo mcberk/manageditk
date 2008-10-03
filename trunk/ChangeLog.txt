@@ -1,0 +1,86 @@
+Version 3.8.0.1
+- Updated to ITK Release 3.8.0 (July 30 2008)
+- Removed RGBAPixel patches which are now supported by ITK
+- Added MANAGED_ITK_ASSEMBLY_PREFIX CMake variable to change assembly names
+- Fixed wrapping bug with itkImageRegistrationMethod wrapping
+- Added wrapping for MultiResolutionImageRegistrationMethod (in ManagedITK.Registration)
+- Improved wrapping for meshes (added set point and cell methods)
+
+Version 3.6.0.3
+- Added InPlace and CanRunInPlace properties to all InPlaceImageFilters
+- Added wrapping for ScaleShiftImageFilter (in ManagedITK.IntensityFilters)
+- BREAKING CHANGE: reworked wrapping types for FastMarchingImageFilter
+- Added wrapping for a number of spatial objects
+
+Version 3.6.0.2
+- BREAKING CHANGE: refactored NativePointer to use IntPtr instead of void*
+- BREAKING CHANGE: refactored event wrapping, including delegate names
+- Added wrapping for QuadEdgeMesh
+- Improved wrapping for meshes (added get point and cell methods)
+- Improved hashing capabilities (GetHashCode()) of itkArray and subclasses
+- Added Vesselness external project
+- Added wrapping for AntiAliasBinaryImageFilter (in ManagedITK.LevelSetFilters)
+- Added wrapping for ImageIOBase and most subclasses (in ManagedITK.IO)
+- Added wrapping for StreamingImageFilter (in ManagedITK.IO)
+- Added wrapping for HessianRecursiveGaussianImageFilter (in ManagedITK.GradientFilters)
+- Added wrapping for a number of validation image filters
+- Added wrapping for a number of morphological image filters
+- Added wrapping for a number of threshold image filters
+
+Version 3.6.0.1
+ - Updated to ITK Release 3.6.0 (April 14 2008)
+ - BREAKING CHANGE: changed various iterator Get/Set methods to properties
+ - Added support for ITK_USE_CONCEPT_CHECKING
+ - Added wrapping support for bool images
+ - Added wrapping support for meshes
+ - Added ImportImageFilter (in ManagedITK.IO)
+ - Fixed bug in VTK external project
+ - Renamed Topology external project to Skeletonize
+
+Version 3.4.0.1
+ - Updated to ITK Release 3.4.0 (September 23 2007)
+ - Fixed bug with DisposeNativeObjectOnFinalize which could throw a NullReferenceException
+ - Added external project for VTK
+
+Version 3.2.0.5
+ - BREAKING CHANGE: reworked assembly names (removed Image and Filtering subgroups)
+ - Renamed itkObjectNoNew to itkNoSmartPointerObject
+ - Fixed some memory finalize/dispose problems
+ - Added ToString() support for all managed objects
+ - Added wrappers for Paths
+ - Added wrapper for ImageMomentsCalculator
+
+Version 3.2.0.4
+ - Fixed bug with LocalMaximaImageFilter
+ - Added itkManagedDataObjectWithReadWrite and changed inheritance hierarchy
+ - Added support for SpatialObjects
+
+Version 3.2.0.3
+ - Fixed bug with itkImage.New(string) method
+ - Added wrapper for ZeroCrossingImageFilter
+ - Added wrapper for ZeroCrossingEdgeBasedDetectionImageFilter
+ - Added wrapper for VectorRescaleIntensityImageFilter
+ - Fixed bug with wrapper for GradientRecursiveGaussianImageFilter
+ - Added wrapper for PowerImageFilter
+ - Improved support for external project include directories
+ - Added support for FastMorphology
+
+Version 3.2.0.2
+ - Added support for out-of-source builds
+ - Added static constructor methods to itkManagedMatrix
+ - Added dot and cross operations to itkManagedVector
+ - Added itkManagedMultiThreader
+ - Added BinaryCrossStructuringElement
+ - Added FlatStructuringElement
+ - Added Annulus operator to FlatStructuringElement
+ - Improved support for RGBA images (composing, etc.)
+ - Added class and wrapper for itkLevelSetSpeedImageFilter
+ - Added itkBinaryClosingImageFilter and itkBinaryOpeningImageFilter (until native support)
+ - Added wrapper for itkFlipImageFilter
+ - Added wrapper for itkBilateralImageFilter
+ - Added class and wrapper for itkJointHistogramImageFilter
+ - Added class and wrapper for itkAdditiveGaussianNoiseImageFilter
+ - Added class and wrapper for itkImpulseNoiseImageFilter
+
+Version 3.2.0.1
+ - Initial release

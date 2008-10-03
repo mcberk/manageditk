@@ -1,0 +1,12 @@
+ObjectType = Image
+NDims = 2
+BinaryData = True
+BinaryDataByteOrderMSB = False
+TransformMatrix = 1 0 0 1
+Offset = 0 0
+CenterOfRotation = 0 0
+ElementSpacing = 0.5 0.25
+DimSize = 256 256
+AnatomicalOrientation = ???
+ElementType = MET_UCHAR
+ElementDataFile = sf4.raw

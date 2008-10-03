@@ -1,0 +1,47 @@
+WRAP_CLASS("itk::MutualInformationImageToImageMetric")
+
+  SET(MANAGED_TYPE_TEMPLATE ${MANAGED_ITK_SOURCE_COMMON_PATH}/itkManagedImageToImageMetric_TYPE.cxx.in)
+  SET(MANAGED_WRAPPER_TEMPLATE ${MANAGED_ITK_SOURCE_COMMON_PATH}/itkManagedImageToImageMetric_WRAPPER.cxx.in)
+
+  WRAP_IMAGE_FILTER_USIGN_INT(2 2+)
+  WRAP_IMAGE_FILTER_SIGN_INT(2 2+)
+  WRAP_IMAGE_FILTER_REAL(2 2+)
+  
+  BEGIN_MANAGED_PROPERTY("NumberOfSpatialSamples" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the number of spatial samples to used to compute metric.")
+    SET(MANAGED_PROPERTY_TYPE      "unsigned long")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetNumberOfSpatialSamples( value );")
+    SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetNumberOfSpatialSamples();")
+  END_MANAGED_PROPERTY()
+
+  BEGIN_MANAGED_PROPERTY("MovingImageStandardDeviation" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the moving image intensitiy standard deviation. This defines the kernel bandwidth used in the joint probability distribution calculation. Default value is 0.4 which works well for image intensities normalized to a mean of 0 and standard deviation of 1.0. Value is clamped to be always greater than zero.")
+    SET(MANAGED_PROPERTY_TYPE      "double")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetMovingImageStandardDeviation( value );")
+    SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetMovingImageStandardDeviation();")
+  END_MANAGED_PROPERTY()
+
+  BEGIN_MANAGED_PROPERTY("FixedImageStandardDeviation" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the fixed image intensitiy standard deviation. This defines the kernel bandwidth used in the joint probability distribution calculation. Default value is 0.4 which works well for image intensities normalized to a mean of 0 and standard deviation of 1.0. Value is clamped to be always greater than zero.")
+    SET(MANAGED_PROPERTY_TYPE      "double")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetFixedImageStandardDeviation( value );")
+    SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetFixedImageStandardDeviation();")
+  END_MANAGED_PROPERTY()
+
+  BEGIN_MANAGED_METHOD("ReinitializeSeed")
+    SET(MANAGED_METHOD_SUMMARY         "Reinitialize the seed of the random number generator.")
+    SET(MANAGED_METHOD_RETURN_TYPE     "void")
+    SET(MANAGED_METHOD_PARAMS          "void")
+    SET(MANAGED_METHOD_TYPE_BODY       "m_PointerToNative->ReinitializeSeed( );")
+    SET(MANAGED_METHOD_WRAPPER_BODY    "iInstance->ReinitializeSeed( );")
+  END_MANAGED_METHOD()
+
+  BEGIN_MANAGED_METHOD("ReinitializeSeed")
+    SET(MANAGED_METHOD_SUMMARY         "Reinitialize the seed of the random number generator.")
+    SET(MANAGED_METHOD_RETURN_TYPE     "void")
+    SET(MANAGED_METHOD_PARAMS          "int seed")
+    SET(MANAGED_METHOD_TYPE_BODY       "m_PointerToNative->ReinitializeSeed( seed );")
+    SET(MANAGED_METHOD_WRAPPER_BODY    "iInstance->ReinitializeSeed( seed );")
+  END_MANAGED_METHOD()
+
+END_WRAP_CLASS()
