@@ -167,7 +167,7 @@ END_WRAP_TYPE()
 SET(itk_Wrap_Image ${WRAP_TEMPLATE_LIST})
 
 WRAP_TYPE("itk::VectorImage" "IVI")
-  # Make a list of all of the selected image pixel types and also uchar 
+  # Make a list of all of the selected image pixel types and also uchar
   # (for 8-bit image output)
   UNIQUE(wrap_image_types "${WRAP_ITK_SCALAR_NO_BOOL};UC")
 
@@ -221,22 +221,23 @@ END_WRAP_TYPE()
 SET(itk_Wrap_PolyLineParametricPath ${WRAP_TEMPLATE_LIST})
 
 WRAP_TYPE("itk::Mesh" "M") # M = Mesh
+  # NOTE: Make TCoordRep = double to avoid compilation errors
   FOREACH(d ${WRAP_ITK_DIMS})
     FOREACH(t ${WRAP_ITK_MESH_PIXELS})
       WRAP_TEMPLATE("${ITKM_${t}}${d}S"
-        "${ITKT_${t}},${d},itk::DefaultStaticMeshTraits< ${ITKT_${t}},${d},${d},${ITKT_${t}} >")
+        "${ITKT_${t}},${d},itk::DefaultStaticMeshTraits< ${ITKT_${t}},${d},${d},double >")
       WRAP_TEMPLATE("${ITKM_${t}}${d}D"
-        "${ITKT_${t}},${d},itk::DefaultDynamicMeshTraits< ${ITKT_${t}},${d},${d},${ITKT_${t}} >")
+        "${ITKT_${t}},${d},itk::DefaultDynamicMeshTraits< ${ITKT_${t}},${d},${d},double >")
     ENDFOREACH(t)
   ENDFOREACH(d)
 END_WRAP_TYPE()
-WRAP_TYPE("itk::SimplexMesh" "SM") # SM = Simple Mesh
+WRAP_TYPE("itk::SimplexMesh" "SM") # SM = Simplex Mesh
   FOREACH(d ${WRAP_ITK_DIMS})
     FOREACH(t ${WRAP_ITK_MESH_PIXELS})
       WRAP_TEMPLATE("${ITKM_${t}}${d}S"
-        "${ITKT_${t}},${d},itk::DefaultStaticMeshTraits< ${ITKT_${t}},${d},${d},${ITKT_${t}} >")
+        "${ITKT_${t}},${d},itk::DefaultStaticMeshTraits< ${ITKT_${t}},${d},${d},double >")
       WRAP_TEMPLATE("${ITKM_${t}}${d}D"
-        "${ITKT_${t}},${d},itk::DefaultDynamicMeshTraits< ${ITKT_${t}},${d},${d},${ITKT_${t}} >")
+        "${ITKT_${t}},${d},itk::DefaultDynamicMeshTraits< ${ITKT_${t}},${d},${d},double >")
     ENDFOREACH(t)
   ENDFOREACH(d)
 END_WRAP_TYPE()

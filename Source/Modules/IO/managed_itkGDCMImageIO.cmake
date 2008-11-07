@@ -2,7 +2,7 @@ WRAP_CLASS("itk::GDCMImageIO")
 
   SET(MANAGED_WRAPPER_TEMPLATE ${MANAGED_ITK_SOURCE_COMMON_PATH}/itkManagedImageIOBase_WRAPPER.cxx.in)
   SET(WRAP_TEMPLATE_LIST )
-  
+
   BEGIN_MANAGED_PROPERTY("RescaleSlope" GET)
     SET(MANAGED_PROPERTY_SUMMARY   "Get the Rescale Slope DICOM value.")
     SET(MANAGED_PROPERTY_TYPE      "double")
@@ -33,20 +33,20 @@ WRAP_CLASS("itk::GDCMImageIO")
     SET(MANAGED_PROPERTY_TYPE      "String^")
     SET(MANAGED_PROPERTY_GET_BODY  "return gcnew String( m_PointerToNative->GetSeriesInstanceUID() );")
   END_MANAGED_PROPERTY()
-  
+
   BEGIN_MANAGED_PROPERTY("FrameOfReferenceInstanceUID" GET)
     SET(MANAGED_PROPERTY_SUMMARY   "Get the DICOM Frame Of Reference Instance UID.")
     SET(MANAGED_PROPERTY_TYPE      "String^")
     SET(MANAGED_PROPERTY_GET_BODY  "return gcnew String( m_PointerToNative->GetFrameOfReferenceInstanceUID() );")
   END_MANAGED_PROPERTY()
-  
+
   BEGIN_MANAGED_PROPERTY("KeepOriginalUID" GETSET)
     SET(MANAGED_PROPERTY_SUMMARY   "Get/set if the original DICOM UID of the input files should be preserved.")
     SET(MANAGED_PROPERTY_TYPE      "bool")
     SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetKeepOriginalUID();")
     SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetKeepOriginalUID( value );")
   END_MANAGED_PROPERTY()
-  
+
   BEGIN_MANAGED_PROPERTY("LoadSequences" GETSET)
     SET(MANAGED_PROPERTY_SUMMARY   "Get/set if sequences in the DICOM file should be parsed. Defaults to the value of LoadSequencesDefault. Loading DICOM files is faster when sequences are not needed.")
     SET(MANAGED_PROPERTY_TYPE      "bool")
@@ -60,10 +60,10 @@ WRAP_CLASS("itk::GDCMImageIO")
     SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetLoadPrivateTags();")
     SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetLoadPrivateTags( value );")
   END_MANAGED_PROPERTY()
-  
+
   SET(body "")
   SET(body "${body}///<summary>A managed enumerated type for the compression type.</summary>\n")
-  SET(body "${body}\tenum class CompressionTypeEnum\n")
+  SET(body "${body}\tpublic enum class CompressionTypeEnum\n")
   SET(body "${body}\t{\n")
   SET(body "${body}\t\tJPEG = 0,\n")
   SET(body "${body}\t\tJPEG2000\n")

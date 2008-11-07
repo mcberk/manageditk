@@ -109,6 +109,10 @@ public:
     ///<summary>Set the matrix to identity and the offset to zeros.</summary>
     virtual void SetIdentity( ) = 0;
 
+    ///<summary>Compose with another MatrixOffsetTransformBase.</summary>
+    ///<remarks>This method composes self with another MatrixOffsetTransformBase of the same dimension, modifying self to be the composition of self and other. If the argument pre is true, then other is precomposed with self; that is, the resulting transformation consists of first applying other to the source, followed by self. If pre is false or omitted, then other is post-composed with self; that is the resulting transformation consists of first applying self to the source, followed by other. This updates the Translation based on current center.</remarks>
+    virtual void Compose( itkMatrixOffsetTransform^ transform, bool pre ) = 0;
+
 
 }; // end ref class
 

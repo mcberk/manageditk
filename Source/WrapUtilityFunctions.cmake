@@ -19,6 +19,9 @@ MACRO(END_MODULE_GROUP)
                        ${CMAKE_SOURCE_DIR}
                        ${MANAGED_WRAPPER_INPUT}
                        ${MANAGED_WRAPPER_OUTPUT}
+                       ${MANAGED_WRAPPER_OUTPUT}
+                       ${MANAGED_WRAPPER_OUTPUT}/..
+                       ${MANAGED_WRAPPER_OUTPUT}/../..
                        ${MANAGED_ITK_SOURCE_BUILD_PATH}
                        ${MANAGED_ITK_SOURCE_COMMON_BUILD_PATH}
                        ${MANAGED_ITK_SOURCE_MODULES_BUILD_PATH}

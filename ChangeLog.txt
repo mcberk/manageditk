@@ -1,3 +1,11 @@
+Version 3.10.0.1
+- Changed mesh wrappers to use WRAP_ITK_REAL (float, rather than double, is now wrapped by default)
+- Fixed bug with external projects
+- Added Compose to itkManagedMatrixOffsetTransform
+- Added boolean type to default wrapping parameters
+- Added patch for issue with VersorTransform
+- Added wrapping for FastMarchingUpwindGradientImageFilter
+
 Version 3.8.0.1
 - Updated to ITK Release 3.8.0 (July 30 2008)
 - Removed RGBAPixel patches which are now supported by ITK

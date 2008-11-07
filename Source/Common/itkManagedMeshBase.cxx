@@ -71,6 +71,13 @@ public:
     ///<summary>Get the number of cells comprising this mesh.</summary>
     property unsigned long NumberOfCells { virtual unsigned long get( ) = 0; }
 
+    ///<summary>Return whether the cells are of the same type and have the same number of points.</summary>
+    virtual bool CellsHaveSameTypeAndNumberOfPoints( ) = 0;
+
+    ///<summary>Compute the number of indices for cells with the given number of points per cell.</summary>
+    ///<remarks>This method is intended for use with GetCellIndicesAsArray(uint, IntPtr) to determine the space to allocate.</remarks>
+    virtual unsigned int ComputeNumberOfIndices( unsigned int numberOfPointsPerCell) = 0;
+
     ///<summary>Return the pointer to the native CellsContainerPointer.</summary>
     virtual IntPtr GetCells( ) = 0;
 
@@ -82,8 +89,14 @@ public:
     ///<param name="arrayptr">The memory location to write the cell indices. It is the caller's responsiblity to ensure enough memory has been allocated.</param>
     virtual void GetCellIndicesAsArray( IntPtr arrayptr ) = 0;
 
+    ///<summary>Copy the array of cell indicies to the given memory location. If the cell is not of the given type, it is broken up into cells of the given type (or at least attempted, the cell is totally skipped if not possible).</summary>
+    ///<param name="numberOfPointsPerCell">The number of points for each cell. Typical values will be 2 (for a line list), or 3 (for a triangle list).</param>
+    ///<param name="arrayptr">The memory location to write the cell indices. It is the caller's responsiblity to ensure enough memory has been allocated.</param>
+    virtual void GetCellIndicesAsArray( unsigned int numberOfPointsPerCell, IntPtr arrayptr ) = 0;
+
     ///<summary>Set the cells from the given memory location. This method only creates meshes with homogenuous cells (ie. all cells are the same).</summary>
     ///<param name="numberOfCells">The number of cells in the array. The array will have (numberOfCells * NumberOfPoints in cell) values.</param>
+    ///<param name="cellType">The type of cells contained in the array. All cells must be of the same type.</param>
     ///<param name="arrayptr">The memory location to read the cells. It is the caller's responsiblity to ensure the array has the correct number of values.</param>
     virtual void SetCellIndicesAsArray( unsigned int numberOfCells, itkCellTypeEnum cellType, IntPtr arrayptr ) = 0;
 
