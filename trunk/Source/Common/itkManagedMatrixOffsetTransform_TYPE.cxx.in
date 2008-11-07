@@ -108,7 +108,7 @@ public:
             this->m_PointerToNative.Reset();
         }
     }
-    
+
     ///<summary>Finalize the managed object.</summary>
     !itk@MANAGED_BASE_NAME@_@MANGLED_SUFFIX@ ( )
     {
@@ -124,15 +124,15 @@ public:
     property IntPtr NativePointer
     {
         virtual IntPtr get() override { return IntPtr(this->m_PointerToNative.Get()); }
-        virtual void set ( IntPtr value ) override 
+        virtual void set ( IntPtr value ) override
         {
             this->m_PointerToNative.Reset( (NativeType*)value.ToPointer() );
         }
     }
-    
+
     ///<summary>Get the last modified time.</summary>
-    property unsigned long MTime 
-    { 
+    property unsigned long MTime
+    {
         virtual unsigned long get() override { return this->m_PointerToNative->GetMTime(); }
     }
 
@@ -143,11 +143,11 @@ public:
         {
             // Create a new managed object
             itk@MANAGED_BASE_NAME@_@MANGLED_SUFFIX@^ newManagedObject = gcnew itk@MANAGED_BASE_NAME@_@MANGLED_SUFFIX@();
-    
+
             // Create a new native object
             NativeType::Pointer nativeObject = NativeType::New();
             newManagedObject->m_PointerToNative.Reset( nativeObject );
-            
+
             // Add AnyEvent observer
             newManagedObject->AddAnyEventObserver();
 
@@ -159,7 +159,7 @@ public:
             throw gcnew itkExceptionObject( ex.GetDescription(), ex.GetLocation(), ex.GetFile(), ex.GetLine() );
         }
     }
-    
+
     ///<summary>Return itk::LightObject::Print( ostream ) as a string.</summary>
     virtual String^ ToString ( ) override
     {
@@ -212,7 +212,7 @@ public:
 
     ///<summary>Get/set the transformation parameters.</summary>
     property itkArray<double>^ Parameters
-    { 
+    {
         virtual itkArray<double>^ get() override
         {
             return itk::ManagedTypes::ToManagedArray<double>( this->m_PointerToNative->GetParameters() );
@@ -222,7 +222,7 @@ public:
             this->m_PointerToNative->SetParameters( itk::ManagedTypes::ToNativeArray<double>(parameters) );
         }
     }
-    
+
     ///<summary>Return the inverse of the transform.</summary>
     ///<param name="inverse">The managed instance to become the inverse transform.</param>
     ///<returns>True if the inverse exists, false otherwise.</returns>
@@ -239,7 +239,7 @@ public:
                 // Set the managed inverse to the native inverse
                 inverse->NativePointer = IntPtr((NativeType*)nativeInverse);
             }
-            
+
             return result;
         }
         catch ( itk::ExceptionObject& ex )
@@ -273,7 +273,7 @@ public:
         // Convert native to managed and return
         return itk::ManagedTypes::ToManagedVector< NativeType::OutputSpaceDimension >(nativeOutputVector);
     }
-    
+
     ///<summary>Get/set the matrix.</summary>
     ///<remarks>To define an affine transform, you must set the matrix, center, and translation OR the matrix and offset.</remarks>
     property itkMatrix^ Matrix
@@ -298,7 +298,7 @@ public:
     ///<remarks>To define an affine transform, you must set the matrix, center, and translation OR the matrix and offset.</remarks>
     property itkPoint^ Center
     {
-        virtual itkPoint^ get() override 
+        virtual itkPoint^ get() override
         { return itk::ManagedTypes::ToManagedPoint<InputPointType::PointDimension>( this->m_PointerToNative->GetCenter() ); }
         virtual void set(itkPoint^ value) override
         { this->m_PointerToNative->SetCenter( itk::ManagedTypes::ToNativePoint<InputPointType::PointDimension>(value) ); }
@@ -308,16 +308,23 @@ public:
     ///<remarks>To define an affine transform, you must set the matrix, center, and translation OR the matrix and offset.</remarks>
     property itkVector^ Translation
     {
-        virtual itkVector^ get() override 
+        virtual itkVector^ get() override
         { return itk::ManagedTypes::ToManagedVector<OutputVectorType::Dimension>( this->m_PointerToNative->GetTranslation() ); }
-        virtual void set(itkVector^ value) override 
+        virtual void set(itkVector^ value) override
         { this->m_PointerToNative->SetTranslation( itk::ManagedTypes::ToNativeVector<OutputVectorType::Dimension>(value) ); }
     }
 
     ///<summary>Set the matrix to identity and the offset to zeros.</summary>
-    virtual void SetIdentity( ) override 
+    virtual void SetIdentity( ) override
     {
         this->m_PointerToNative->SetIdentity();
+    }
+
+    ///<summary>Compose with another MatrixOffsetTransformBase.</summary>
+    ///<remarks>This method composes self with another MatrixOffsetTransformBase of the same dimension, modifying self to be the composition of self and other. If the argument pre is true, then other is precomposed with self; that is, the resulting transformation consists of first applying other to the source, followed by self. If pre is false or omitted, then other is post-composed with self; that is the resulting transformation consists of first applying self to the source, followed by other. This updates the Translation based on current center.</remarks>
+    virtual void Compose( itkMatrixOffsetTransform^ transform, bool pre ) override
+    {
+        this->m_PointerToNative->Compose( reinterpret_cast<NativeType*>(transform->NativePointer.ToPointer()), pre );
     }
     @MANAGED_PROPERTIES_TYPE@ @MANAGED_METHODS_TYPE@
 

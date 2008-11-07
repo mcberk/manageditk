@@ -5,7 +5,7 @@ WRAP_CLASS("itk::TIFFImageIO")
 
   SET(body "")
   SET(body "${body}///<summary>A managed enumerated type for the compression.</summary>\n")
-  SET(body "${body}\tenum class CompressionEnum\n")
+  SET(body "${body}\tpublic enum class CompressionEnum\n")
   SET(body "${body}\t{\n")
   SET(body "${body}\t\tNoCompression,\n")
   SET(body "${body}\t\tPackBits,\n")

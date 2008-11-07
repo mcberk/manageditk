@@ -10,3 +10,4 @@ Example:
 cd C:\ManagedITK\Patch
 patch C:\ITK\Code\Common\itkShapedNeighborhoodIterator.h < itkShapedNeighborhoodIterator.h.patch
 patch C:\ITK\Code\Common\itkConstShapedNeighborhoodIterator.h < itkConstShapedNeighborhoodIterator.h.patch
+patch C:\ITK\Code\Common\itkVersorTransform.txx < itkVersorTransform.txx.patch

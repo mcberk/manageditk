@@ -317,6 +317,79 @@ public:
         }
     }
 
+    ///<summary>Return whether the cells are of the same type and have the same number of points.</summary>
+    virtual bool CellsHaveSameTypeAndNumberOfPoints( ) override
+    {
+        bool result = true;
+        typedef itk::CellInterface< NativeType::PixelType, NativeType::CellTraits > CellType;
+
+        // Get cell iterators
+        NativeType::CellsContainerPointer cells = this->m_PointerToNative->GetCells( );
+        NativeType::CellsContainerConstIterator it = cells->Begin();
+        NativeType::CellsContainerConstIterator itEnd = cells->End();
+
+        // Get first cell
+        CellType* firstcell = it.Value();
+        ++it;
+
+        // Step through cells
+        while ( it != itEnd )
+        {
+            if ( firstcell->GetType() != it.Value()->GetType() ||
+                 firstcell->GetNumberOfPoints() != it.Value()->GetNumberOfPoints() )
+            {
+                // Not the same type or number of points, break and return false
+                result = false;
+                break;
+            }
+            ++it;
+        }
+
+        return result;
+    }
+
+    ///<summary>Compute the number of indices for cells with the given number of points per cell.</summary>
+    ///<remarks>This method is intended for use with GetCellIndicesAsArray(uint, IntPtr) to determine the space to allocate.</remarks>
+    virtual unsigned int ComputeNumberOfIndices( unsigned int numberOfPointsPerCell) override
+    {
+        unsigned int result = 0;
+
+        // Step through unmanaged array
+        NativeType::CellsContainerPointer cells = this->m_PointerToNative->GetCells( );
+        NativeType::CellsContainerConstIterator it = cells->Begin();
+        NativeType::CellsContainerConstIterator itEnd = cells->End();
+        while ( it != itEnd )
+        {
+            unsigned int numberOfPointsInThisCell = it.Value()->GetNumberOfPoints();
+            if (numberOfPointsInThisCell < numberOfPointsPerCell)
+            {
+                // Ignore these
+            }
+            else if (numberOfPointsInThisCell == numberOfPointsPerCell)
+            {
+                result +=  numberOfPointsInThisCell;
+            }
+            else
+            {
+                switch (numberOfPointsPerCell)
+                {
+                    case 2:
+                        result += numberOfPointsInThisCell * 2;
+                        break;
+                    case 3:
+                        result += (numberOfPointsInThisCell - 2) * 3; // Assumes a convex polygon
+                        break;
+                    default:
+                        // Not supported, ignore...
+                        break;
+                }
+            }
+            ++it;
+        }
+
+        return result;
+    }
+
     ///<summary>Return the pointer to the native CellsContainerPointer.</summary>
     virtual IntPtr GetCells( ) override
     {
@@ -371,8 +444,74 @@ public:
         }
     }
 
+    ///<summary>Copy the array of cell indicies to the given memory location. If the cell is not of the given type, it is broken up into cells of the given type (or at least attempted, the cell is totally skipped if not possible).</summary>
+    ///<param name="numberOfPointsPerCell">The number of points for each cell. Typical values will be 2 (for a line list), or 3 (for a triangle list).</param>
+    ///<param name="arrayptr">The memory location to write the cell indices. It is the caller's responsiblity to ensure enough memory has been allocated.</param>
+    virtual void GetCellIndicesAsArray( unsigned int numberOfPointsPerCell, IntPtr arrayptr ) override
+    {
+        // Cast input to array of points
+        NativeType::CellIdentifier* array = (NativeType::CellIdentifier*)arrayptr.ToPointer();
+        unsigned int i = 0;
+
+        // Step through unmanaged array
+        NativeType::CellsContainerPointer cells = this->m_PointerToNative->GetCells( );
+        NativeType::CellsContainerConstIterator itCells = cells->Begin();
+        NativeType::CellsContainerConstIterator itCellsEnd = cells->End();
+        while ( itCells != itCellsEnd )
+        {
+            unsigned int numberOfPointsInThisCell = itCells.Value()->GetNumberOfPoints();
+            NativeType::CellType::PointIdConstIterator itIndices = itCells.Value()->PointIdsBegin();
+            NativeType::CellType::PointIdConstIterator itIndicesStart = itCells.Value()->PointIdsBegin();
+            NativeType::CellType::PointIdConstIterator itIndicesEnd = itCells.Value()->PointIdsEnd();
+            while( itIndices < itIndicesEnd )
+            {
+                if (numberOfPointsInThisCell < numberOfPointsPerCell)
+                {
+                    // Ignore these
+                    break;
+                }
+                else if (numberOfPointsInThisCell == numberOfPointsPerCell)
+                {
+                    // Desired number of points is same as actual, so do a straight copy
+                    array[i++] = *itIndices;
+                    ++itIndices;
+                }
+                else
+                {
+                    // Break cell into primitives of given number of points
+                    switch (numberOfPointsPerCell)
+                    {
+                        case 2:
+                            // Make a line list
+                            array[i++] = *itIndices;
+                            ++itIndices;
+                            array[i++] = (itIndices != itIndicesEnd) ? (*itIndices) : (*itIndicesStart);
+                            ++itIndices;
+                            break;
+                        case 3:
+                            // Make a triangle list (assumes a convex polygon)
+                            if (itIndices == itIndicesStart)
+                            {
+                                ++itIndices;
+                            }
+                            array[i++] = *itIndicesStart;
+                            array[i++] = *(itIndices + 1);
+                            array[i++] = *(itIndices + 2);
+                            itIndices += 3;
+                            break;
+                        default:
+                            // Not supported, ignore...
+                            break;
+                    }
+                }
+            }
+            ++itCells;
+        }
+    }
+
     ///<summary>Set the cells from the given memory location. This method only creates meshes with homogenuous cells (ie. all cells are the same).</summary>
     ///<param name="numberOfCells">The number of cells in the array. The array will have (numberOfCells * NumberOfPoints in cell) values.</param>
+    ///<param name="cellType">The type of cells contained in the array. All cells must be of the same type.</param>
     ///<param name="arrayptr">The memory location to read the cells. It is the caller's responsiblity to ensure the array has the correct number of values.</param>
     virtual void SetCellIndicesAsArray( unsigned int numberOfCells, itkCellTypeEnum cellType, IntPtr arrayptr ) override
     {

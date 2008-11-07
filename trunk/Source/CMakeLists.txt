@@ -11,7 +11,7 @@ OPTION(WRAP_signed_long "Wrap signed long type" OFF)
 
 OPTION(WRAP_float "Wrap float type" ON)
 OPTION(WRAP_double "Wrap double type" OFF)
-OPTION(WRAP_bool "Wrap bool type" OFF)
+OPTION(WRAP_bool "Wrap bool type" ON)
 
 OPTION(WRAP_vector "Wrap vector type" ON)
 OPTION(WRAP_covariant_vector "Wrap covariant vector type" ON)

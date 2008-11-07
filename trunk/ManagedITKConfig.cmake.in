@@ -37,6 +37,8 @@ SET(MANAGED_ITK_USE_FILE "@MANAGED_ITK_USE_FILE@")
 ################################################################################
 # Set ManagedITK variables
 ################################################################################
+SET(MANAGED_ITK_ASSEMBLY_PREFIX "@MANAGED_ITK_ASSEMBLY_PREFIX@")
+
 SET(WRAP_unsigned_char @WRAP_unsigned_char@ CACHE BOOL "Wrap unsigned char type")
 SET(WRAP_unsigned_short @WRAP_unsigned_short@ CACHE BOOL "Wrap unsigned short type")
 SET(WRAP_unsigned_long @WRAP_unsigned_long@ CACHE BOOL "Wrap unsigned long type")
@@ -64,12 +66,12 @@ SET(WRAP_ITK_DIMS "@WRAP_dimensions@")
 # Mark the ManagedITK variables as advanced
 ################################################################################
 FOREACH(var ITK_DIR
-            WRAP_unsigned_char WRAP_unsigned_short WRAP_unsigned_long 
+            WRAP_unsigned_char WRAP_unsigned_short WRAP_unsigned_long
             WRAP_signed_char WRAP_signed_short WRAP_signed_long
-            WRAP_float WRAP_double 
+            WRAP_float WRAP_double
             WRAP_vector WRAP_covariant_vector
-            WRAP_rgb_unsigned_char WRAP_rgb_unsigned_short 
-            WRAP_rgba_unsigned_char WRAP_rgba_unsigned_short 
+            WRAP_rgb_unsigned_char WRAP_rgb_unsigned_short
+            WRAP_rgba_unsigned_char WRAP_rgba_unsigned_short
             WRAP_dimensions)
   MARK_AS_ADVANCED(${var})
 ENDFOREACH(var)
@@ -85,7 +87,6 @@ INCLUDE("@MANAGED_ITK_SOURCE_PATH@/WrapITKTypes.cmake")
 INCLUDE("@MANAGED_ITK_SOURCE_PATH@/WrapCodeGen.cmake")
 INCLUDE("@MANAGED_ITK_SOURCE_PATH@/WrapExternalProject.cmake")
 #-------------------------------------------------------------------------------
-
 
 # Tell the world that this is an external project using ManagedITK
 SET(EXTERNAL_MANAGED_ITK_PROJECT ON)
