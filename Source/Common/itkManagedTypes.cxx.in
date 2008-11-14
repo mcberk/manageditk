@@ -527,6 +527,26 @@ public:
         return managedArray;
     }
 
+    ///<summary>Convert the given managed cli::array to a std::vector array.</summary>
+    template <typename TValueType>
+    static std::vector<TValueType> ToNativeArray( array<TValueType>^ managedArray )
+    {
+        std::vector<TValueType> nativeArray( );
+        for (unsigned int i=0; i<managedArray->Length; i++)
+            nativeArray->push_back( managedArray[i] );
+        return nativeArray;
+    }
+
+    ///<summary>Convert the given std::vector array to a managed cli::array of pixels.</summary>
+    template <typename TValueType>
+    static array<itkPixel^>^ ToManagedCliArray( std::vector<TValueType> nativeArray )
+    {
+        array<itkPixel^>^ managedArray = gcnew array<itkPixel^>( nativeArray.size() );
+        for (unsigned int i=0; i<nativeArray.size(); i++)
+            managedArray[i] = ToManagedPixel<TValueType>( nativeArray[i] );
+        return managedArray;
+    }
+
     static SpatialOrientation::ValidCoordinateOrientationFlags ToNativeSpatialOrientation( itkSpatialOrientationEnum value )
     {
         switch (value)
@@ -664,7 +684,7 @@ public:
     static itkCell^ ToManagedCell( itk::CellInterface<TPixel, TCell> *nativeCell )
     {
         typedef itk::CellInterface<TPixel, TCell> CellType;
-      
+
         // Create pointids array
         unsigned int i = 0;
         unsigned int numPoints = nativeCell->GetNumberOfPoints();
