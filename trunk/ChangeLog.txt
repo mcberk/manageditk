@@ -1,3 +1,9 @@
+Version 3.10.2
+- BREAKING CHANGE: Replaced custom binary morphological filters with those in Code/Review
+- Added wrapping for VanHerkGilWerman erode/dilate filters (in ManagedITK.MorphologicalFilters)
+- Added wrapping for MorphologicalWatershedFromMarkersImageFilter (in ManagedITK.MorphologicalFilters)
+- Added wrapping for KappaSigmaThresholdImageFilter (in ManagedITK.ThresholdFilters)
+
 Version 3.10.0.1
 - Changed mesh wrappers to use WRAP_ITK_REAL (float, rather than double, is now wrapped by default)
 - Fixed bug with external projects

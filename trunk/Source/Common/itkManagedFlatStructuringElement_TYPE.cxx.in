@@ -117,7 +117,7 @@ public:
 
         // Create the native object
         result->m_PointerToNative = new NativeType();
-        *(result->m_PointerToNative) = NativeType::Box( itk::ManagedTypes::ToNativeSize<NativeType::Dimension>(radius) );
+        *(result->m_PointerToNative) = NativeType::Box( itk::ManagedTypes::ToNativeSize<NativeType::NeighborhoodDimension>(radius) );
 
         // Return
         return result;
@@ -141,12 +141,36 @@ public:
 
         // Create the native object
         result->m_PointerToNative = new NativeType();
-        *(result->m_PointerToNative) = NativeType::Ball( itk::ManagedTypes::ToNativeSize<NativeType::Dimension>(radius) );
+        *(result->m_PointerToNative) = NativeType::Ball( itk::ManagedTypes::ToNativeSize<NativeType::NeighborhoodDimension>(radius) );
 
         // Return
         return result;
     }
     
+	///<summary>Create a cross shaped structuring element of the given radius.</summary>
+    static itkFlatStructuringElement_@MANAGED_DIMENSION@^ Cross( itkSize^ radius )
+    {
+        // Check the radius is correct
+        if (radius == nullptr)
+            throw gcnew ArgumentNullException( "The given structuring element radius was null." );
+        else if (radius->Dimension != @MANAGED_DIMENSION@)
+            throw gcnew ArgumentException( "The given structuring element radius is not of the correct dimensionality. Expected @MANAGED_DIMENSION@, got " + radius->Dimension.ToString() );
+
+        // Create the managed wrapper
+        itkFlatStructuringElement_@MANAGED_DIMENSION@^ result = gcnew itkFlatStructuringElement_@MANAGED_DIMENSION@( );
+        result->m_IsDisposed = false;
+        result->m_Instance = result;
+        result->m_Radius = radius;
+        result->m_Type = "Cross";
+
+        // Create the native object
+        result->m_PointerToNative = new NativeType();
+        *(result->m_PointerToNative) = NativeType::Cross( itk::ManagedTypes::ToNativeSize<NativeType::NeighborhoodDimension>(radius) );
+
+        // Return
+        return result;
+    }
+
 	///<summary>
     ///Create an annulus (ring) structuring element of the given outer radius.
     ///The thickness defaults to 1, and the center pixel is excluded.
@@ -168,7 +192,7 @@ public:
 
         // Create the native object
         result->m_PointerToNative = new NativeType();
-        *(result->m_PointerToNative) = NativeType::Annulus( itk::ManagedTypes::ToNativeSize<NativeType::Dimension>(radius) );
+        *(result->m_PointerToNative) = NativeType::Annulus( itk::ManagedTypes::ToNativeSize<NativeType::NeighborhoodDimension>(radius) );
 
         // Return
         return result;
@@ -195,7 +219,7 @@ public:
 
         // Create the native object
         result->m_PointerToNative = new NativeType();
-        *(result->m_PointerToNative) = NativeType::Annulus( itk::ManagedTypes::ToNativeSize<NativeType::Dimension>(radius), thickness );
+        *(result->m_PointerToNative) = NativeType::Annulus( itk::ManagedTypes::ToNativeSize<NativeType::NeighborhoodDimension>(radius), thickness );
 
         // Return
         return result;
@@ -222,7 +246,7 @@ public:
 
         // Create the native object
         result->m_PointerToNative = new NativeType();
-        *(result->m_PointerToNative) = NativeType::Annulus( itk::ManagedTypes::ToNativeSize<NativeType::Dimension>(radius), thickness, includeCenter );
+        *(result->m_PointerToNative) = NativeType::Annulus( itk::ManagedTypes::ToNativeSize<NativeType::NeighborhoodDimension>(radius), thickness, includeCenter );
 
         // Return
         return result;

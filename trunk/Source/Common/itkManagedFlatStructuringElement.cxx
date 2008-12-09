@@ -104,6 +104,14 @@ public:
         result->m_IsDisposed = false;
         return result;
     }
+    
+	///<summary>Create a cross shaped structuring element of the given radius.</summary>
+    static itkFlatStructuringElement^ Cross( itkSize^ radius )
+    {
+        itkFlatStructuringElement^ result = CreateInstance( "Cross", gcnew array<System::Object^>{radius} );
+        result->m_IsDisposed = false;
+        return result;
+    }
 
 	///<summary>
     ///Create an annulus (ring) structuring element of the given outer radius.
