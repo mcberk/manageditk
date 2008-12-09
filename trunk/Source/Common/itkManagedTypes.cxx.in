@@ -529,7 +529,7 @@ public:
 
     ///<summary>Convert the given managed cli::array to a std::vector array.</summary>
     template <typename TValueType>
-    static std::vector<TValueType> ToNativeArray( array<TValueType>^ managedArray )
+    static std::vector<TValueType> ToNativeStdVector( array<TValueType>^ managedArray )
     {
         std::vector<TValueType> nativeArray( );
         for (unsigned int i=0; i<managedArray->Length; i++)
