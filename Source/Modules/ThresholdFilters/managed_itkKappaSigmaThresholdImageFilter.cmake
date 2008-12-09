@@ -1,0 +1,48 @@
+WRAP_CLASS("itk::KappaSigmaThresholdImageFilter")
+
+  WRAP_IMAGE_FILTER_USIGN_INT(1)
+  WRAP_IMAGE_FILTER_SIGN_INT(1)
+  WRAP_IMAGE_FILTER_REAL(1)
+
+  BEGIN_MANAGED_PROPERTY("OutsideValue" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the 'outside' value.")
+    SET(MANAGED_PROPERTY_TYPE      "itkPixel^")
+    SET(MANAGED_PROPERTY_GET_BODY  "return itk::ManagedTypes::ToManagedPixel<NativeType::OutputPixelType>( m_PointerToNative->GetOutsideValue() );")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetOutsideValue( itk::ManagedTypes::ToNativePixel<NativeType::OutputPixelType>( value ) );")
+  END_MANAGED_PROPERTY()
+  
+  BEGIN_MANAGED_PROPERTY("InsideValue" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the 'inside' value.")
+    SET(MANAGED_PROPERTY_TYPE      "itkPixel^")
+    SET(MANAGED_PROPERTY_GET_BODY  "return itk::ManagedTypes::ToManagedPixel<NativeType::OutputPixelType>( m_PointerToNative->GetInsideValue() );")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetInsideValue( itk::ManagedTypes::ToNativePixel<NativeType::OutputPixelType>( value ) );")
+  END_MANAGED_PROPERTY()
+  
+  BEGIN_MANAGED_PROPERTY("MaskValue" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the 'mask' value.")
+    SET(MANAGED_PROPERTY_TYPE      "itkPixel^")
+    SET(MANAGED_PROPERTY_GET_BODY  "return itk::ManagedTypes::ToManagedPixel<NativeType::MaskPixelType>( m_PointerToNative->GetMaskValue() );")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetMaskValue( itk::ManagedTypes::ToNativePixel<NativeType::MaskPixelType>( value ) );")
+  END_MANAGED_PROPERTY()
+
+  BEGIN_MANAGED_PROPERTY("SigmaFactor" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the sigma factor.")
+    SET(MANAGED_PROPERTY_TYPE      "double")
+    SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetSigmaFactor();")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetSigmaFactor( value );")
+  END_MANAGED_PROPERTY()
+
+  BEGIN_MANAGED_PROPERTY("NumberOfIterations" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the number of iterations.")
+    SET(MANAGED_PROPERTY_TYPE      "unsigned int")
+    SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetNumberOfIterations();")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetNumberOfIterations( value );")
+  END_MANAGED_PROPERTY()
+
+  BEGIN_MANAGED_PROPERTY("Threshold" GET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get the computed threshold.")
+    SET(MANAGED_PROPERTY_TYPE      "itkPixel^")
+    SET(MANAGED_PROPERTY_GET_BODY  "return itk::ManagedTypes::ToManagedPixel<NativeType::InputPixelType>( m_PointerToNative->GetThreshold() );")
+  END_MANAGED_PROPERTY()
+
+END_WRAP_CLASS()

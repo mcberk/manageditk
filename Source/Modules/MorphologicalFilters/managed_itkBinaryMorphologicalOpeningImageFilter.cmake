@@ -1,4 +1,4 @@
-WRAP_CLASS("itk::BinaryOpeningImageFilter")
+WRAP_CLASS("itk::BinaryMorphologicalOpeningImageFilter")
 
   WRAP_INCLUDE_TYPE("itkFlatStructuringElement.h")
 
@@ -25,8 +25,8 @@ WRAP_CLASS("itk::BinaryOpeningImageFilter")
   BEGIN_MANAGED_PROPERTY("BackgroundValue" GETSET)
     SET(MANAGED_PROPERTY_SUMMARY   "Get/set the value considered as background.")
     SET(MANAGED_PROPERTY_TYPE      "itkPixel^")
-    SET(MANAGED_PROPERTY_GET_BODY  "return itk::ManagedTypes::ToManagedPixel<NativeType::OutputImageType::PixelType>( m_PointerToNative->GetBackgroundValue() );")
-    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetBackgroundValue( itk::ManagedTypes::ToNativePixel<NativeType::OutputImageType::PixelType>( value ) );")
+    SET(MANAGED_PROPERTY_GET_BODY  "return itk::ManagedTypes::ToManagedPixel<NativeType::InputImageType::PixelType>( m_PointerToNative->GetBackgroundValue() );")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetBackgroundValue( itk::ManagedTypes::ToNativePixel<NativeType::InputImageType::PixelType>( value ) );")
   END_MANAGED_PROPERTY()
 
 END_WRAP_CLASS()

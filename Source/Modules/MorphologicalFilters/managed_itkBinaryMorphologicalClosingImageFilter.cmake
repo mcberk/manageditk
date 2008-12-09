@@ -1,4 +1,4 @@
-WRAP_CLASS("itk::BinaryClosingImageFilter")
+WRAP_CLASS("itk::BinaryMorphologicalClosingImageFilter")
   
   WRAP_INCLUDE_TYPE("itkFlatStructuringElement.h")
   
@@ -22,11 +22,11 @@ WRAP_CLASS("itk::BinaryClosingImageFilter")
     SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetForegroundValue( itk::ManagedTypes::ToNativePixel<NativeType::InputImageType::PixelType>( value ) );")
   END_MANAGED_PROPERTY()
   
-  BEGIN_MANAGED_PROPERTY("BackgroundValue" GETSET)
-    SET(MANAGED_PROPERTY_SUMMARY   "Get/set the value considered as background.")
-    SET(MANAGED_PROPERTY_TYPE      "itkPixel^")
-    SET(MANAGED_PROPERTY_GET_BODY  "return itk::ManagedTypes::ToManagedPixel<NativeType::OutputImageType::PixelType>( m_PointerToNative->GetBackgroundValue() );")
-    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetBackgroundValue( itk::ManagedTypes::ToNativePixel<NativeType::OutputImageType::PixelType>( value ) );")
+  BEGIN_MANAGED_PROPERTY("SafeBorder" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Get/set whether a safe border is added to input image to avoid borders effects and removed it once the closing is done.")
+    SET(MANAGED_PROPERTY_TYPE      "bool")
+    SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetSafeBorder();")
+    SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetSafeBorder( value );")
   END_MANAGED_PROPERTY()
 
 END_WRAP_CLASS()
