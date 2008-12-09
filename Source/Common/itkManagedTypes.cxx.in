@@ -539,11 +539,21 @@ public:
 
     ///<summary>Convert the given std::vector array to a managed cli::array of pixels.</summary>
     template <typename TValueType>
-    static array<itkPixel^>^ ToManagedCliArray( std::vector<TValueType> nativeArray )
+    static array<itkPixel^>^ ToManagedCliPixelArrayFromStdVector( std::vector<TValueType> nativeArray )
     {
         array<itkPixel^>^ managedArray = gcnew array<itkPixel^>( nativeArray.size() );
         for (unsigned int i=0; i<nativeArray.size(); i++)
             managedArray[i] = ToManagedPixel<TValueType>( nativeArray[i] );
+        return managedArray;
+    }
+
+    ///<summary>Convert the given std::vector array to a managed cli::array.</summary>
+    template <typename TValueType>
+    static array<TValueType>^ ToManagedCliArrayFromStdVector( std::vector<TValueType> nativeArray )
+    {
+        array<TValueType>^ managedArray = gcnew array<TValueType>( nativeArray.size() );
+        for (unsigned int i=0; i<nativeArray.size(); i++)
+            managedArray[i] = nativeArray[i];
         return managedArray;
     }
 
