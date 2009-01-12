@@ -1,8 +1,10 @@
 WRAP_CLASS("itk::ConnectedComponentImageFilter")
-  # Create wrappers from every selected integral (signed and un) type to every
-  # selected unsigned type. Also force ulong output for the watershed filter.
-  UNIQUE(to_types "UL;${WRAP_ITK_USIGN_INT}")
-  WRAP_IMAGE_FILTER_COMBINATIONS("${WRAP_ITK_INT}" "${to_types}")
+
+  WRAP_IMAGE_FILTER_USIGN_INT(2)
+  WRAP_IMAGE_FILTER_SIGN_INT(2)
+  IF(NOT WRAP_unsigned_long)
+    WRAP_IMAGE_FILTER("UL" 2)
+  ENDIF(NOT WRAP_unsigned_long)
 
   BEGIN_MANAGED_PROPERTY("FullyConnected" GETSET)
     SET(MANAGED_PROPERTY_SUMMARY   "Get/set the neighbourhood connectivity for the algorithm. For example: with 2D images, FullyConnected=True means 8-neighbourhood connectivity and FullyConnected=False means 4-neighbourhood connectivity.")
