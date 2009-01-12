@@ -1,13 +1,11 @@
 WRAP_CLASS("itk::RelabelComponentImageFilter")
+
   WRAP_IMAGE_FILTER_USIGN_INT(2)
   WRAP_IMAGE_FILTER_SIGN_INT(2)
-  
-  # Wrap from ulong to other integral types, even if ulong isn't wrapped. This
-  # is needed to be able to use image from watershed image filter.
   IF(NOT WRAP_unsigned_long)
-    WRAP_IMAGE_FILTER_COMBINATIONS("UL" "${WRAP_ITK_INT};UL")
+    WRAP_IMAGE_FILTER("UL" 2)
   ENDIF(NOT WRAP_unsigned_long)
-  
+
   BEGIN_MANAGED_PROPERTY("MinimumObjectSize" GETSET)
     SET(MANAGED_PROPERTY_SUMMARY   "Get/set the minimum size of objects to keep after the relabel operation.")
     SET(MANAGED_PROPERTY_TYPE      "unsigned long")
