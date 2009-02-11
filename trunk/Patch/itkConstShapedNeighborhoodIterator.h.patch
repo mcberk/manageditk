@@ -27,7 +27,7 @@
 <   Superclass::GetBoundaryCondition;
 <   Superclass::Print;
 <   Superclass::operator-;
-<  
+<
 <   Superclass::GetPixel;
 ---
 >   const ImageType * GetImagePointer(void) const { return Superclass::GetImagePointer(); }
@@ -61,7 +61,8 @@
 >   const BoundaryConditionType *GetBoundaryCondition() const { Superclass::GetBoundaryCondition(); }
 >   void Print(std::ostream& os) const { Superclass::Print(os); }
 >   //Superclass::operator-;
->   virtual PixelType GetPixel(const unsigned i) const { return Superclass::GetPixel(i); }  
+>   virtual PixelType GetPixel(const unsigned i) const { return Superclass::GetPixel(i); }
+>   virtual PixelType GetPixel(const OffsetType &o) const { return Superclass::GetPixel(o); }
 326,327c328,332
 <   Superclass::SetPixel;
 <   Superclass::SetCenterPixel;
@@ -70,4 +71,4 @@
 >   virtual void SetPixel(const unsigned i, const PixelType &v) { Superclass::SetPixel(i, v); }
 >   virtual void SetPixel(const OffsetType o, const PixelType &v) { Superclass::SetPixel(o, v); }
 >   virtual void SetCenterPixel(const PixelType &p) { Superclass::SetCenterPixel(p); }
->   
+>
