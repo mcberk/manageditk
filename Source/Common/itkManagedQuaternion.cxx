@@ -130,7 +130,7 @@ public:
 	{
 		virtual itkQuaternionValueType get() 
 		{
-			return Math::Sqrt( m_X*m_X + m_Y*m_Y + m_Z*m_Z + m_W*m_W ); 
+			return System::Math::Sqrt( m_X*m_X + m_Y*m_Y + m_Z*m_Z + m_W*m_W ); 
 		}
 	}
 
@@ -140,9 +140,9 @@ public:
 		virtual itkVector^ get() 
 		{
 			itkVector^ axis = gcnew itkVector(3U);
-			itkQuaternionValueType vectorNorm = Math::Sqrt( m_X*m_X + m_Y*m_Y + m_Z*m_Z );
+			itkQuaternionValueType vectorNorm = System::Math::Sqrt( m_X*m_X + m_Y*m_Y + m_Z*m_Z );
 
-			if (Math::Abs(vectorNorm) < Double::Epsilon)
+			if (System::Math::Abs(vectorNorm) < Double::Epsilon)
 			{
 				axis[0] = 0.0;
 				axis[1] = 0.0;
@@ -165,7 +165,7 @@ public:
 	///</summary>
 	property itkVector^ Right
 	{
-		virtual itkVector^ get() 
+		virtual itkVector^ get()
 		{
 			itkVector^ right = gcnew itkVector(3U);
 			right[0] = m_X;
@@ -182,8 +182,8 @@ public:
 	{
 		virtual itkQuaternionValueType get() 
 		{
-			itkQuaternionValueType vectorNorm = Math::Sqrt( m_X*m_X + m_Y*m_Y + m_Z*m_Z );
-			itkQuaternionValueType angle = 2.0 * Math::Atan2( vectorNorm, m_W );  
+			itkQuaternionValueType vectorNorm = System::Math::Sqrt( m_X*m_X + m_Y*m_Y + m_Z*m_Z );
+			itkQuaternionValueType angle = 2.0 * System::Math::Atan2( vectorNorm, m_W );  
 			return angle;
 		}
 	}
@@ -195,11 +195,11 @@ public:
 	{
 		itkQuaternionValueType tensor = this->Tensor;
 
-		if (Math::Abs(tensor) < Double::Epsilon)
+		if (System::Math::Abs(tensor) < Double::Epsilon)
 			throw gcnew ApplicationException( "Attempted to normalize an itkQuaternion with zero tensor." );
 		
 		m_X /= tensor;
-		m_Y /= tensor;  
+		m_Y /= tensor;
 		m_Z /= tensor;
 		m_W /= tensor;
 	}
@@ -208,7 +208,7 @@ public:
     virtual void Set( itkQuaternionValueType x, itkQuaternionValueType y, itkQuaternionValueType z, itkQuaternionValueType w )
 	{
 		m_X = x;
-		m_Y = y;  
+		m_Y = y;
 		m_Z = z;
 		m_W = w;
 	}
@@ -221,49 +221,49 @@ public:
     virtual void Set( itkVector^ axis, itkQuaternionValueType angle )
 	{
 		itkQuaternionValueType vectorNorm = axis->GetNorm();
-		itkQuaternionValueType cosangle2 = Math::Cos( angle/2.0 );
-		itkQuaternionValueType sinangle2 = Math::Sin( angle/2.0 );
+		itkQuaternionValueType cosangle2 = System::Math::Cos( angle/2.0 );
+		itkQuaternionValueType sinangle2 = System::Math::Sin( angle/2.0 );
 		itkQuaternionValueType factor =  sinangle2 / vectorNorm;
   
 		m_X = axis[0] * factor;
 		m_Y = axis[1] * factor;
-		m_Z = axis[2] * factor;  
+		m_Z = axis[2] * factor;
 		m_W = cosangle2;
 	}
 
 	///<summary>Set the Quaternion as a rotation around the X-axis.</summary>
     virtual void SetRotationAroundX( itkQuaternionValueType angle )
 	{
-		itkQuaternionValueType sinangle2 = Math::Sin( angle/2.0 );
-		itkQuaternionValueType cosangle2 = Math::Cos( angle/2.0 );
+		itkQuaternionValueType sinangle2 = System::Math::Sin( angle/2.0 );
+		itkQuaternionValueType cosangle2 = System::Math::Cos( angle/2.0 );
 
 		m_X = sinangle2;
 		m_Y = 0.0;
-		m_Z = 0.0;  
+		m_Z = 0.0;
 		m_W = cosangle2;
 	}
 
 	///<summary>Set the Quaternion as a rotation around the Y-axis.</summary>
     virtual void SetRotationAroundY( itkQuaternionValueType angle )
 	{
-		itkQuaternionValueType sinangle2 = Math::Sin( angle/2.0 );
-		itkQuaternionValueType cosangle2 = Math::Cos( angle/2.0 );
+		itkQuaternionValueType sinangle2 = System::Math::Sin( angle/2.0 );
+		itkQuaternionValueType cosangle2 = System::Math::Cos( angle/2.0 );
 
 		m_X = 0.0;
 		m_Y = sinangle2;
-		m_Z = 0.0;  
+		m_Z = 0.0;
 		m_W = cosangle2;
 	}
 
 	///<summary>Set the Quaternion as a rotation around the Z-axis.</summary>
     virtual void SetRotationAroundZ( itkQuaternionValueType angle )
 	{
-		itkQuaternionValueType sinangle2 = Math::Sin( angle/2.0 );
-		itkQuaternionValueType cosangle2 = Math::Cos( angle/2.0 );
+		itkQuaternionValueType sinangle2 = System::Math::Sin( angle/2.0 );
+		itkQuaternionValueType cosangle2 = System::Math::Cos( angle/2.0 );
 
 		m_X = 0.0;
 		m_Y = 0.0;
-		m_Z = sinangle2;  
+		m_Z = sinangle2;
 		m_W = cosangle2;
 	}
 
@@ -272,7 +272,7 @@ public:
 	{
 		m_X = 0.0;
 		m_Y = 0.0;
-		m_Z = 0.0;  
+		m_Z = 0.0;
 		m_W = 1.0;
 	}
 

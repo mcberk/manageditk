@@ -1,4 +1,4 @@
-234,263c234,265
+234,263c234,266
 <   Superclass::GetImagePointer;
 <   Superclass::GetRadius;
 <   Superclass::GetIndex;
@@ -27,7 +27,7 @@
 <   Superclass::GetBoundaryCondition;
 <   Superclass::Print;
 <   Superclass::operator-;
-<
+<  
 <   Superclass::GetPixel;
 ---
 >   const ImageType * GetImagePointer(void) const { return Superclass::GetImagePointer(); }
@@ -63,7 +63,7 @@
 >   //Superclass::operator-;
 >   virtual PixelType GetPixel(const unsigned i) const { return Superclass::GetPixel(i); }
 >   virtual PixelType GetPixel(const OffsetType &o) const { return Superclass::GetPixel(o); }
-326,327c328,332
+326,327c329,333
 <   Superclass::SetPixel;
 <   Superclass::SetCenterPixel;
 ---
@@ -71,4 +71,4 @@
 >   virtual void SetPixel(const unsigned i, const PixelType &v) { Superclass::SetPixel(i, v); }
 >   virtual void SetPixel(const OffsetType o, const PixelType &v) { Superclass::SetPixel(o, v); }
 >   virtual void SetCenterPixel(const PixelType &p) { Superclass::SetCenterPixel(p); }
->
+> 

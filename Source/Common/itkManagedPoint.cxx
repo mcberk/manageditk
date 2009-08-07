@@ -234,7 +234,7 @@ public:
     ///<returns>The Euclidean distance from this to the given point.</returns>
 	virtual double EuclideanDistanceTo(itkPoint^ point)
 	{
-		return Math::Sqrt(this->SquaredEuclideanDistanceTo(point) );
+		return System::Math::Sqrt(this->SquaredEuclideanDistanceTo(point) );
 	}
 
 }; // end ref class

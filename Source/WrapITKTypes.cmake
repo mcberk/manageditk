@@ -150,7 +150,7 @@ WRAP_TYPE("itk::Image" "I")
   # Make a list of all of the selected image pixel types and also double (for
   # BSplineDeformableTransform), uchar (for 8-bit image output), and ulong
   # (for the watershed and relabel filters).
-  UNIQUE(wrap_image_types "${WRAP_ITK_ALL_TYPES};UC;SS;UL;F;D;RGBUC;RGBAUC;VD;CVD;")
+  UNIQUE(wrap_image_types "${WRAP_ITK_ALL_TYPES};UC;US;SS;UL;F;D;RGBUC;RGBAUC;VD;CVD;")
 
   FOREACH(d ${WRAP_ITK_DIMS})
     FOREACH(type ${wrap_image_types})

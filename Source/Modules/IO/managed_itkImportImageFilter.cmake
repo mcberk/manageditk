@@ -4,7 +4,7 @@ WRAP_CLASS("itk::ImportImageFilter")
   SET(MANAGED_WRAPPER_TEMPLATE ${MANAGED_ITK_SOURCE_COMMON_PATH}/itkManagedImageSource_WRAPPER.cxx.in)
 
   FOREACH(d ${WRAP_ITK_DIMS})
-    UNIQUE (types "${WRAP_ITK_SCALAR}")
+    UNIQUE (types "${WRAP_ITK_SCALAR};${WRAP_ITK_COLOR};US")
       FOREACH(t ${types})
         WRAP_TEMPLATE("${ITKM_${t}}${d}"
                       "${ITKT_${t}},${d}")
@@ -17,7 +17,7 @@ WRAP_CLASS("itk::ImportImageFilter")
     SET(MANAGED_PROPERTY_GET_BODY  "return itk::ManagedTypes::ToManagedImageRegion<NativeType::OutputImageType::ImageDimension>( m_PointerToNative->GetRegion() );")
     SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetRegion( itk::ManagedTypes::ToNativeImageRegion<NativeType::OutputImageType::ImageDimension>(value) );")
   END_MANAGED_PROPERTY()
-  
+
   BEGIN_MANAGED_PROPERTY("Spacing" GETSET)
     SET(MANAGED_PROPERTY_SUMMARY   "Get/set the spacing of the imported image.")
     SET(MANAGED_PROPERTY_TYPE      "itkSpacing^")
@@ -31,7 +31,7 @@ WRAP_CLASS("itk::ImportImageFilter")
     SET(MANAGED_PROPERTY_GET_BODY  "return itk::ManagedTypes::ToManagedPoint<NativeType::OutputImageType::ImageDimension>( m_PointerToNative->GetOrigin() );")
     SET(MANAGED_PROPERTY_SET_BODY  "m_PointerToNative->SetOrigin( itk::ManagedTypes::ToNativePoint<NativeType::OutputImageType::ImageDimension>(value) );")
   END_MANAGED_PROPERTY()
-  
+
   BEGIN_MANAGED_METHOD("SetImportPointer")
     SET(MANAGED_METHOD_SUMMARY         "Set the pointer from which the image data is imported. num is the number of pixels in the block of memory. If letFilterManageMemory is false, then the this filter will not free the memory in its destructor and the application providing the buffer retains the responsibility of freeing the memory for this image data. If letFilterManageMemory is true, then this class will free the memory when this object is destroyed.")
     SET(MANAGED_METHOD_RETURN_TYPE     "void")
@@ -39,5 +39,5 @@ WRAP_CLASS("itk::ImportImageFilter")
     SET(MANAGED_METHOD_TYPE_BODY       "this->m_PointerToNative->SetImportPointer((NativeType::OutputImagePixelType*)(ptr.ToPointer()), num, letFilterManageMemory);")
     SET(MANAGED_METHOD_WRAPPER_BODY    "iInstance->SetImportPointer(ptr, num, letFilterManageMemory);")
   END_MANAGED_METHOD()
-  
+
 END_WRAP_CLASS()

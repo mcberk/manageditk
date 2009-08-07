@@ -254,7 +254,7 @@ public:
     ///<returns>The Euclidean norm (magnitude) of the vector.</returns>
     double GetNorm()
     {
-		return Math::Sqrt(this->GetSquaredNorm());
+		return System::Math::Sqrt(this->GetSquaredNorm());
     }
 
 	///<summary>Computes the squared Euclidean (magnitude) of the vector.</summary>
