@@ -100,7 +100,7 @@ public:
     {
         itkIndex^ index = gcnew itkIndex(this->Dimension);
         for (unsigned int i=0; i<this->Dimension; i++)
-			index[i] += (int)Math::Round(this[i], MidpointRounding::AwayFromZero);
+            index[i] += (int)System::Math::Round(this[i], MidpointRounding::AwayFromZero);
         return index;
     }
 
