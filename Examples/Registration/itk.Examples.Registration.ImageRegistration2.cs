@@ -156,7 +156,7 @@ static class ImageRegistration2
             caster.SetInput(checkerOut);
             caster.Update();
             caster.GetOutput(output);
-            if (args.Length < 4) {
+            if (args.Length > 3) {
                 output.Write(args[3]);
             }
 
@@ -168,7 +168,7 @@ static class ImageRegistration2
             caster.SetInput(checkerOut);
             caster.Update();
             caster.GetOutput(output);
-            if (args.Length < 5) {
+            if (args.Length > 4) {
                 output.Write(args[4]);
             }
         }
