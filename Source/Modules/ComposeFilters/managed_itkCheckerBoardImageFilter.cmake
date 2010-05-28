@@ -39,4 +39,11 @@ WRAP_CLASS("itk::CheckerBoardImageFilter")
     SET(MANAGED_METHOD_WRAPPER_BODY    "iInstance->SetInput2(inputPtr);")
   END_MANAGED_METHOD()
 
+  BEGIN_MANAGED_PROPERTY("CheckerPattern" GETSET)
+    SET(MANAGED_PROPERTY_SUMMARY   "Set the pattern size (uniform in all directions).")
+    SET(MANAGED_PROPERTY_TYPE      "unsigned int")
+    SET(MANAGED_PROPERTY_GET_BODY  "return m_PointerToNative->GetCheckerPattern()[0];")
+    SET(MANAGED_PROPERTY_SET_BODY  "NativeType::PatternArrayType pattern; pattern.Fill(value); m_PointerToNative->SetCheckerPattern( pattern );")
+  END_MANAGED_PROPERTY()
+
 END_WRAP_CLASS()
