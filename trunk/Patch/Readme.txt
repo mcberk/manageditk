@@ -7,10 +7,10 @@ INSTRUCTIONS:
 3. Apply each patch in this directory to your ITK source
 
 Example:
-cd C:\ManagedITK\Patch
-patch C:\ITK\Code\Common\itkShapedNeighborhoodIterator.h < itkShapedNeighborhoodIterator.h.patch
-patch C:\ITK\Code\Common\itkConstShapedNeighborhoodIterator.h < itkConstShapedNeighborhoodIterator.h.patch
-patch C:\ITK\Code\Common\itkVersorTransform.txx < itkVersorTransform.txx.patch
+cd D:\ManagedITK\Patch
+patch D:\InsightToolkit-3.20.0\Code\Common\itkShapedNeighborhoodIterator.h < itkShapedNeighborhoodIterator.h.patch
+patch D:\InsightToolkit-3.20.0\Code\Common\itkConstShapedNeighborhoodIterator.h < itkConstShapedNeighborhoodIterator.h.patch
+patch D:\InsightToolkit-3.20.0\Code\Common\itkVersorTransform.txx < itkVersorTransform.txx.patch
 
 NOTE:
 These patches were generated using the "diff --text" command.

@@ -76,65 +76,92 @@ public ref class itkImageToImageMetric abstract : itkSingleValuedCostFunction
 {
 
 public:
-	///<summary>Set the fixed image.</summary>
-	virtual void SetFixedImage( itkImageBase^ image ) = 0;
+    ///<summary>Set the fixed image.</summary>
+    virtual void SetFixedImage( itkImageBase^ image ) = 0;
 
     ///<summary>Set the fixed image.</summary>
-	virtual void SetFixedImage( IntPtr imagePtr ) = 0;
+    virtual void SetFixedImage( IntPtr imagePtr ) = 0;
 
-	///<summary>Get the fixed image.</summary>
+    ///<summary>Get the fixed image.</summary>
     ///<param name="image">The itkImageBase to become the fixed image.</param>
-	virtual void GetFixedImage( itkImageBase^ image ) = 0;
-
-	///<summary>Set the moving image.</summary>
-	virtual void SetMovingImage( itkImageBase^ image ) = 0;
+    virtual void GetFixedImage( itkImageBase^ image ) = 0;
 
     ///<summary>Set the moving image.</summary>
-	virtual void SetMovingImage( IntPtr imagePtr ) = 0;
+    virtual void SetMovingImage( itkImageBase^ image ) = 0;
 
-	///<summary>Get the moving image.</summary>
+    ///<summary>Set the moving image.</summary>
+    virtual void SetMovingImage( IntPtr imagePtr ) = 0;
+
+    ///<summary>Get the moving image.</summary>
     ///<param name="image">The itkImageBase to become the moving image.</param>
-	virtual void GetMovingImage( itkImageBase^ image ) = 0;
+    virtual void GetMovingImage( itkImageBase^ image ) = 0;
 
-	///<summary>Set the transform.</summary>
-	virtual void SetTransform( itkTransform^ transform ) = 0;
+    ///<summary>Set the fixed image mask.</summary>
+    virtual void SetFixedImageMask( itkImageBase^ mask ) = 0;
 
-	///<summary>Get the transform.</summary>
+    ///<summary>Set the fixed image mask.</summary>
+    virtual void SetFixedImageMask( IntPtr imagePtr ) = 0;
+
+    ///<summary>Get the fixed image mask.</summary>
+    ///<param name="mask">The itkImageBase to become the fixed image mask.</param>
+    virtual void GetFixedImageMask( itkImageBase^ mask ) = 0;
+
+    ///<summary>Set the moving image mask.</summary>
+    virtual void SetMovingImageMask( itkImageBase^ mask ) = 0;
+
+    ///<summary>Set the moving image mask.</summary>
+    virtual void SetMovingImageMask( IntPtr imagePtr ) = 0;
+
+    ///<summary>Get the moving image mask.</summary>
+    ///<param name="mask">The itkImageBase to become the moving image mask.</param>
+    virtual void GetMovingImageMask( itkImageBase^ mask ) = 0;
+
+    ///<summary>Set the transform.</summary>
+    virtual void SetTransform( itkTransform^ transform ) = 0;
+
+    ///<summary>Get the transform.</summary>
     ///<param name="transform">The itkTransform to become the transform.</param>
-	virtual void GetTransform( itkTransform^ transform ) = 0;
+    virtual void GetTransform( itkTransform^ transform ) = 0;
 
-	///<summary>Set the interpolator.</summary>
-	virtual void SetInterpolator( itkImageFunction^ interpolator ) = 0;
+    ///<summary>Set the interpolator.</summary>
+    virtual void SetInterpolator( itkImageFunction^ interpolator ) = 0;
 
-	///<summary>Get the interpolator.</summary>
+    ///<summary>Get the interpolator.</summary>
     ///<param name="interpolator">The itkImageFuction to become the interpolator.</param>
-	virtual void GetInterpolator( itkImageFunction^ interpolator ) = 0;
+    virtual void GetInterpolator( itkImageFunction^ interpolator ) = 0;
 
-	///<summary>Get the number of pixels considered in the computation.</summary>
-	property unsigned int NumberOfPixelsCounted 
-	{ 
-		virtual unsigned int get() = 0;
-	}
+    ///<summary>Get/set the region over which the metric will be computed.</summary>
+    property itkImageRegion^ FixedImageRegion
+    {
+        virtual itkImageRegion^ get() = 0;
+        virtual void set( itkImageRegion^ ) = 0;
+    }
 
-	///<summary>Get/set whether the gradient should be computed or not.</summary>
-	property bool ComputeGradient 
-	{ 
-		virtual bool get() = 0;
-		virtual void set( bool value ) = 0;
-	}
+    ///<summary>Get the number of pixels considered in the computation.</summary>
+    property unsigned int NumberOfPixelsCounted 
+    { 
+        virtual unsigned int get() = 0;
+    }
 
-	///<summary>Get the gradient image.</summary>
+    ///<summary>Get/set whether the gradient should be computed or not.</summary>
+    property bool ComputeGradient 
+    { 
+        virtual bool get() = 0;
+        virtual void set( bool value ) = 0;
+    }
+
+    ///<summary>Get the gradient image.</summary>
     ///<param name="image">The itkImageBase to become the gradient image.</param>
-	virtual void GetGradientImage( itkImageBase^ image ) = 0;
+    virtual void GetGradientImage( itkImageBase^ image ) = 0;
 
-	///<summary>Set the parameters defining the Transform.</summary>
-	virtual void SetTransformParameters( itkArray<double>^ parameters ) = 0;
+    ///<summary>Set the parameters defining the Transform.</summary>
+    virtual void SetTransformParameters( itkArray<double>^ parameters ) = 0;
 
-	///<summary>
-	///Initialize the Metric by making sure that all the components are present
-	///and plugged together correctly.
-	///</summary>
-	virtual void Initialize( ) = 0;
+    ///<summary>
+    ///Initialize the Metric by making sure that all the components are present
+    ///and plugged together correctly.
+    ///</summary>
+    virtual void Initialize( ) = 0;
 
 }; // end ref class
 

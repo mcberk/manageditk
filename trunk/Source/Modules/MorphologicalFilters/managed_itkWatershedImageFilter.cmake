@@ -3,7 +3,7 @@ WRAP_CLASS("itk::WatershedImageFilter")
   WRAP_IMAGE_FILTER_USIGN_INT(1)
   WRAP_IMAGE_FILTER_SIGN_INT(1)
   IF(NOT WRAP_unsigned_long)
-    WRAP_IMAGE_FILTER("UL" 2)
+    WRAP_IMAGE_FILTER("UL" 1)
   ENDIF(NOT WRAP_unsigned_long)
 
   BEGIN_MANAGED_PROPERTY("Threshold" GETSET)

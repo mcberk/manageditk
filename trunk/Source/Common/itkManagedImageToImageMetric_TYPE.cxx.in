@@ -83,6 +83,8 @@ private:
     typedef NativeType::ParametersType ParametersType;
     typedef NativeType::MovingImageType MovingImageType;
     typedef NativeType::FixedImageType FixedImageType;
+    typedef NativeType::MovingImageMaskType MovingImageMaskType;
+    typedef NativeType::FixedImageMaskType FixedImageMaskType;
     typedef NativeType::TransformType TransformType;
     typedef NativeType::InterpolatorType InterpolatorType;
     typedef NativeType::GradientImageType GradientImageType;
@@ -260,6 +262,44 @@ public:
         image->NativePointer = IntPtr((MovingImageType*)m_PointerToNative->GetMovingImage());
     }
 
+    ///<summary>Set the fixed image mask.</summary>
+    virtual void SetFixedImageMask( itkImageBase^ mask ) override
+    {
+        m_PointerToNative->SetFixedImageMask( reinterpret_cast<FixedImageMaskType*>( mask->NativePointer.ToPointer()) );
+    }
+
+    ///<summary>Set the fixed image mask.</summary>
+    virtual void SetFixedImageMask( IntPtr imagePtr ) override
+    {
+        m_PointerToNative->SetFixedImageMask( (FixedImageMaskType*)imagePtr.ToPointer() );
+    }
+
+    ///<summary>Get the fixed image mask.</summary>
+    ///<param name="mask">The itkImageBase to become the fixed image mask.</param>
+    virtual void GetFixedImageMask( itkImageBase^ mask ) override
+    {
+        mask->NativePointer = IntPtr((FixedImageMaskType*)m_PointerToNative->GetFixedImageMask());
+    }
+
+    ///<summary>Set the moving image mask.</summary>
+    virtual void SetMovingImageMask( itkImageBase^ mask ) override
+    {
+        m_PointerToNative->SetMovingImageMask( reinterpret_cast<MovingImageMaskType*>( mask->NativePointer.ToPointer()) );
+    }
+
+    ///<summary>Set the moving image mask.</summary>
+    virtual void SetMovingImageMask( IntPtr imagePtr ) override
+    {
+        m_PointerToNative->SetMovingImageMask( (MovingImageMaskType*)imagePtr.ToPointer() );
+    }
+
+    ///<summary>Get the moving image mask.</summary>
+    ///<param name="mask">The itkImageBase to become the moving image mask.</param>
+    virtual void GetMovingImageMask( itkImageBase^ mask ) override
+    {
+        mask->NativePointer = IntPtr((MovingImageMaskType*)m_PointerToNative->GetMovingImageMask());
+    }
+
     ///<summary>Set the transform.</summary>
     virtual void SetTransform( itkTransform^ transform ) override
     {
@@ -284,6 +324,13 @@ public:
     virtual void GetInterpolator( itkImageFunction^ interpolator ) override
     {
         interpolator->NativePointer = IntPtr((InterpolatorType*)m_PointerToNative->GetInterpolator());
+    }
+
+    ///<summary>Get/set the region over which the metric will be computed.</summary>
+    property itkImageRegion^ FixedImageRegion
+    { 
+        virtual itkImageRegion^ get() override { return itk::ManagedTypes::ToManagedImageRegion<FixedImageType::ImageDimension>( m_PointerToNative->GetFixedImageRegion() ); }
+        virtual void set( itkImageRegion^ value ) override { m_PointerToNative->SetFixedImageRegion( itk::ManagedTypes::ToNativeImageRegion<FixedImageType::ImageDimension>(value) ); }
     }
 
     ///<summary>Get the number of pixels considered in the computation.</summary>
