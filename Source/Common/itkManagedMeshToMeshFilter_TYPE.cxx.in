@@ -320,7 +320,7 @@ public:
     virtual IntPtr GetOutput( unsigned int index ) override
     {
         // Call GetOutput on the filter
-        return static_cast<IntPtr>( this->m_PointerToNative->GetOutput(index) );
+        return IntPtr((OutputMeshType*)this->m_PointerToNative->GetOutput(index));
     }
 
     ///<summary>Get the first output as an IntPtr.</summary>
@@ -328,7 +328,7 @@ public:
     virtual IntPtr GetOutput( ) override
     {
         // Call GetOutput on the filter
-        return static_cast<IntPtr>( this->m_PointerToNative->GetOutput() );
+        return IntPtr((OutputMeshType*)this->m_PointerToNative->GetOutput());
     }
         ///<summary>Set the first input of the filter object.</summary>
     ///<param name="input">The input as an itkMeshBase.</param>
@@ -348,7 +348,7 @@ public:
     ///<returns>The input as an IntPtr.</returns>
     virtual IntPtr GetInput( ) override
     {
-        return static_cast<IntPtr>( this->m_PointerToNative->GetInput() );
+        return IntPtr((InputMeshType*)this->m_PointerToNative->GetInput());
     }
 
     ///<summary>Get the first input of the filter object.</summary>

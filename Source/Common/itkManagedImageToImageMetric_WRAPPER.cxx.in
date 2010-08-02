@@ -82,15 +82,15 @@ private:
 
 protected:
     ///<summary>Protected constructor.</summary>
-	itk@MANAGED_BASE_NAME@ ( ) : itkImageToImageMetric( )
+    itk@MANAGED_BASE_NAME@ ( ) : itkImageToImageMetric( )
     { }
 
 public:
     ///<summary>Dispose of the managed object.</summary>
     ~itk@MANAGED_BASE_NAME@ ( )
     {
-		if (!this->IsDisposed)
-		{
+        if (!this->IsDisposed)
+        {
             this->m_IsDisposed = true;
             delete m_Instance;
         }
@@ -103,12 +103,12 @@ public:
             delete this;
     }
     
-	///<summary>
-	///Gets/sets if the underlying native object should be disposed when the managed object is finalized.
-	///The default is true.
-	///</summary>
-	property bool DisposeNativeObjectOnFinalize
-	{
+    ///<summary>
+    ///Gets/sets if the underlying native object should be disposed when the managed object is finalized.
+    ///The default is true.
+    ///</summary>
+    property bool DisposeNativeObjectOnFinalize
+    {
         virtual bool get() override
         {
             if ( this->m_Instance == nullptr ) return true;
@@ -117,26 +117,26 @@ public:
         virtual void set( bool value ) override
         { 
             if ( this->m_Instance != nullptr )
-                this->m_Instance->DisposeNativeObjectOnFinalize = value;			
+                this->m_Instance->DisposeNativeObjectOnFinalize = value;
         }
-	}
+    }
     
-	///<summary>
-	///Get/set the pointer to the native ITK object associated with
-	///this wrapper instance.
-	///</summary>
-	///<returns>The pointer to the native ITK object.</returns>
-	property IntPtr NativePointer
+    ///<summary>
+    ///Get/set the pointer to the native ITK object associated with
+    ///this wrapper instance.
+    ///</summary>
+    ///<returns>The pointer to the native ITK object.</returns>
+    property IntPtr NativePointer
     {
         virtual IntPtr get() override { return IntPtr(this->m_Instance->NativePointer); }
         virtual void set ( IntPtr value ) override { this->m_Instance->NativePointer = value; }
     }
     
-	///<summary>Get the last modified time.</summary>
-	property unsigned long MTime 
-	{ 
-		virtual unsigned long get() override { return this->m_Instance->MTime; } 
-	}
+    ///<summary>Get the last modified time.</summary>
+    property unsigned long MTime 
+    { 
+        virtual unsigned long get() override { return this->m_Instance->MTime; } 
+    }
 
     ///<summary>Create a specific type instance using the given types.</summary>
     ///<param name="types">An array of types specifying which instance to create.</param>
@@ -144,7 +144,7 @@ public:
     {
         // Check that types is valid
         if ( types == nullptr || types->Length == 0 )
-			throw gcnew itkInvalidWrappedTypeException("The given types array is invalid. A non-empty, valid types array must be specified to create an instance of a wrapped itk::@MANAGED_BASE_NAME@.");
+            throw gcnew itkInvalidWrappedTypeException("The given types array is invalid. A non-empty, valid types array must be specified to create an instance of a wrapped itk::@MANAGED_BASE_NAME@.");
 
         // Create the MangledTypeString for the specified explicit instance
         String^ mangledType = String::Empty;
@@ -161,231 +161,276 @@ public:
         // Create a new managed object
         itk@MANAGED_BASE_NAME@^ newManagedObject = gcnew itk@MANAGED_BASE_NAME@();
         newManagedObject->m_MangledTypeString = mangledType;
-    	
+        
         // Get the name of the instance type to create
         String^ nameInstanceType = "itk.itk@MANAGED_BASE_NAME@_" + newManagedObject->MangledTypeString;
 
-		try
-		{
+        try
+        {
             // Create the correct instance class
-			Type^ typeInstance = Assembly::GetExecutingAssembly()->GetType(nameInstanceType);
-			if (typeInstance == nullptr)
-			    throw gcnew NullReferenceException("The type '" + nameInstanceType + "' could not be found in " + Assembly::GetExecutingAssembly()->GetName() );
-			Object^ objInstance = typeInstance->InvokeMember("New", BindingFlags::InvokeMethod, Type::DefaultBinder, nullptr, nullptr);
-			if (objInstance == nullptr)
-			    throw gcnew NullReferenceException("Could not invoke the New() method for '" + nameInstanceType + "'.");
+            Type^ typeInstance = Assembly::GetExecutingAssembly()->GetType(nameInstanceType);
+            if (typeInstance == nullptr)
+                throw gcnew NullReferenceException("The type '" + nameInstanceType + "' could not be found in " + Assembly::GetExecutingAssembly()->GetName() );
+            Object^ objInstance = typeInstance->InvokeMember("New", BindingFlags::InvokeMethod, Type::DefaultBinder, nullptr, nullptr);
+            if (objInstance == nullptr)
+                throw gcnew NullReferenceException("Could not invoke the New() method for '" + nameInstanceType + "'.");
             newManagedObject->m_Instance = safe_cast<itkImageToImageMetric^>(objInstance);
             
-    		// Pass events from type to wrapper
-			newManagedObject->PassEventsFromTypeToWrapper( );
+            // Pass events from type to wrapper
+            newManagedObject->PassEventsFromTypeToWrapper( );
 
-        	// Return
-        	return newManagedObject;
+            // Return
+            return newManagedObject;
         }
-		catch (Exception^ ex)
-		{
-			throw gcnew itkInvalidWrappedTypeException("Could not create an instance of '" + nameInstanceType + "'. The given type may not be supported or may be invalid.", ex);
-		}
+        catch (Exception^ ex)
+        {
+            throw gcnew itkInvalidWrappedTypeException("Could not create an instance of '" + nameInstanceType + "'. The given type may not be supported or may be invalid.", ex);
+        }
     }
     
     ///<summary>Return itk::LightObject::Print( ostream ) as a string.</summary>
-	virtual String^ ToString ( ) override
-	{
+    virtual String^ ToString ( ) override
+    {
         return m_Instance->ToString( );
-	}
+    }
     
     ///<summary>
     ///Remove all observers watching this object.
     ///</summary>
     ///<remarks>
-	///By default, observers are created for all events. Calling this
-	///method removes all native observers, and therefore prevents
-	///the firing of managed events. Call AddAnyEventObserver() to
-	///reset the default observers which enable the managed events.
-	///</remarks>
-	virtual void RemoveAllObservers ( ) override
-	{
-		this->m_Instance->RemoveAllObservers();
-	}
+    ///By default, observers are created for all events. Calling this
+    ///method removes all native observers, and therefore prevents
+    ///the firing of managed events. Call AddAnyEventObserver() to
+    ///reset the default observers which enable the managed events.
+    ///</remarks>
+    virtual void RemoveAllObservers ( ) override
+    {
+        this->m_Instance->RemoveAllObservers();
+    }
 
     ///<summary>
     ///Adds a native observer watching for any event.
     ///</summary>
     ///<remarks>
-	///By default, observers are created for all events. Calling this
-	///method adds a single native observer for any event. This
-	///observer invokes the managed events. Therefore, calling this
-	///method more than once, or calling it without first calling
-	///RemoveAllObservers(), may cause the managed events to be
-	///invoked more than once.
-	///</remarks>
-	virtual void AddAnyEventObserver ( ) override
-	{
+    ///By default, observers are created for all events. Calling this
+    ///method adds a single native observer for any event. This
+    ///observer invokes the managed events. Therefore, calling this
+    ///method more than once, or calling it without first calling
+    ///RemoveAllObservers(), may cause the managed events to be
+    ///invoked more than once.
+    ///</remarks>
+    virtual void AddAnyEventObserver ( ) override
+    {
         this->m_Instance->AddAnyEventObserver( );
         this->PassEventsFromTypeToWrapper( );
-	}
+    }
 
     ///<summary>Get the number of parameters required to compute the cost function.</summary>
-	property unsigned int NumberOfParameters
+    property unsigned int NumberOfParameters
     { 
-		virtual unsigned int get() override { return m_Instance->NumberOfParameters; }
-	}
-	
+        virtual unsigned int get() override { return m_Instance->NumberOfParameters; }
+    }
+    
     ///<summary>Return the value of the cost function corresponding to the specified parameters.</summary>
-	virtual double GetValue( itkArray<double>^ parameters ) override
-	{
+    virtual double GetValue( itkArray<double>^ parameters ) override
+    {
         return m_Instance->GetValue( parameters );
     }
 
     ///<summary>Return the derivative of the cost function corresponding to the specified parameters.</summary>
-	virtual itkArray<double>^ GetDerivative( itkArray<double>^ parameters ) override
-	{
+    virtual itkArray<double>^ GetDerivative( itkArray<double>^ parameters ) override
+    {
         return m_Instance->GetDerivative( parameters );
     }
     
-	///<summary>Return the derivative of the cost function corresponding to the specified parameters.</summary>
-	//virtual void GetValueAndDerivative( itkArray<double>^ parameters, double value, itkArray<double>^ derivative ) = 0;
+    ///<summary>Return the derivative of the cost function corresponding to the specified parameters.</summary>
+    //virtual void GetValueAndDerivative( itkArray<double>^ parameters, double value, itkArray<double>^ derivative ) = 0;
 
     ///<summary>Set the fixed image.</summary>
-	virtual void SetFixedImage( itkImageBase^ image ) override
-	{
+    virtual void SetFixedImage( itkImageBase^ image ) override
+    {
         m_Instance->SetFixedImage( image );
     }
     
     ///<summary>Set the fixed image.</summary>
-	virtual void SetFixedImage( IntPtr imagePtr ) override
-	{
+    virtual void SetFixedImage( IntPtr imagePtr ) override
+    {
         m_Instance->SetFixedImage( imagePtr );
     }
 
-	///<summary>Get the fixed image.</summary>
+    ///<summary>Get the fixed image.</summary>
     ///<param name="image">The itkImageBase to become the fixed image.</param>
-	virtual void GetFixedImage( itkImageBase^ image ) override
-	{
+    virtual void GetFixedImage( itkImageBase^ image ) override
+    {
         m_Instance->GetFixedImage( image );
     }
 
-	///<summary>Set the moving image.</summary>
-	virtual void SetMovingImage( itkImageBase^ image ) override
-	{
+    ///<summary>Set the moving image.</summary>
+    virtual void SetMovingImage( itkImageBase^ image ) override
+    {
         m_Instance->SetMovingImage( image );
     }
     
     ///<summary>Set the moving image.</summary>
-	virtual void SetMovingImage( IntPtr imagePtr ) override
-	{
+    virtual void SetMovingImage( IntPtr imagePtr ) override
+    {
         m_Instance->SetMovingImage( imagePtr );
     }
 
-	///<summary>Get the moving image.</summary>
+    ///<summary>Get the moving image.</summary>
     ///<param name="image">The itkImageBase to become the moving image.</param>
-	virtual void GetMovingImage( itkImageBase^ image ) override
-	{
+    virtual void GetMovingImage( itkImageBase^ image ) override
+    {
         m_Instance->GetMovingImage( image );
     }
 
-	///<summary>Set the transform.</summary>
-	virtual void SetTransform( itkTransform^ transform ) override
-	{
+    ///<summary>Set the fixed image mask.</summary>
+    virtual void SetFixedImageMask( itkImageBase^ mask ) override
+    {
+        m_Instance->SetFixedImageMask( mask );
+    }
+    
+    ///<summary>Set the fixed image mask.</summary>
+    virtual void SetFixedImageMask( IntPtr imagePtr ) override
+    {
+        m_Instance->SetFixedImageMask( imagePtr );
+    }
+
+    ///<summary>Get the fixed image mask.</summary>
+    ///<param name="mask">The itkImageBase to become the fixed image mask.</param>
+    virtual void GetFixedImageMask( itkImageBase^ mask ) override
+    {
+        m_Instance->GetFixedImageMask( mask );
+    }
+
+    ///<summary>Set the moving image mask.</summary>
+    virtual void SetMovingImageMask( itkImageBase^ mask ) override
+    {
+        m_Instance->SetMovingImageMask( mask );
+    }
+
+    ///<summary>Set the moving image mask.</summary>
+    virtual void SetMovingImageMask( IntPtr imagePtr ) override
+    {
+        m_Instance->SetMovingImageMask( imagePtr );
+    }
+
+    ///<summary>Get the moving image mask.</summary>
+    ///<param name="mask">The itkImageBase to become the moving image mask.</param>
+    virtual void GetMovingImageMask( itkImageBase^ mask ) override
+    {
+        m_Instance->GetMovingImageMask( mask );
+    }
+
+    ///<summary>Set the transform.</summary>
+    virtual void SetTransform( itkTransform^ transform ) override
+    {
         m_Instance->SetTransform( transform );
     }
 
-	///<summary>Get the transform.</summary>
+    ///<summary>Get the transform.</summary>
     ///<param name="transform">The itkTransform to become the transform.</param>
-	virtual void GetTransform( itkTransform^ transform ) override
-	{
+    virtual void GetTransform( itkTransform^ transform ) override
+    {
         m_Instance->GetTransform( transform );
     }
 
-	///<summary>Set the interpolator.</summary>
-	virtual void SetInterpolator( itkImageFunction^ interpolator ) override
-	{
+    ///<summary>Set the interpolator.</summary>
+    virtual void SetInterpolator( itkImageFunction^ interpolator ) override
+    {
         m_Instance->SetInterpolator( interpolator );
     }
 
-	///<summary>Get the interpolator.</summary>
+    ///<summary>Get the interpolator.</summary>
     ///<param name="interpolator">The itkImageFuction to become the interpolator.</param>
-	virtual void GetInterpolator( itkImageFunction^ interpolator ) override
-	{
+    virtual void GetInterpolator( itkImageFunction^ interpolator ) override
+    {
         m_Instance->GetInterpolator( interpolator );
     }
 
-	///<summary>Get the number of pixels considered in the computation.</summary>
-	property unsigned int NumberOfPixelsCounted 
-	{ 
-		virtual unsigned int get() override { return m_Instance->NumberOfPixelsCounted; }
-	}
+    ///<summary>Get/set the region over which the metric will be computed.</summary>
+    property itkImageRegion^ FixedImageRegion
+    { 
+        virtual itkImageRegion^ get() override { return m_Instance->FixedImageRegion; }
+        virtual void set( itkImageRegion^ value ) override { m_Instance->FixedImageRegion = value; }
+    }
 
-	///<summary>Get/set whether the gradient should be computed or not.</summary>
-	property bool ComputeGradient 
-	{ 
-		virtual bool get() override { return m_Instance->ComputeGradient; }
-		virtual void set( bool value ) override { m_Instance->ComputeGradient = value; }
-	}
+    ///<summary>Get the number of pixels considered in the computation.</summary>
+    property unsigned int NumberOfPixelsCounted 
+    { 
+        virtual unsigned int get() override { return m_Instance->NumberOfPixelsCounted; }
+    }
 
-	///<summary>Get the gradient image.</summary>
+    ///<summary>Get/set whether the gradient should be computed or not.</summary>
+    property bool ComputeGradient 
+    { 
+        virtual bool get() override { return m_Instance->ComputeGradient; }
+        virtual void set( bool value ) override { m_Instance->ComputeGradient = value; }
+    }
+
+    ///<summary>Get the gradient image.</summary>
     ///<param name="image">The itkImageBase to become the gradient image.</param>
-	virtual void GetGradientImage( itkImageBase^ image ) override
-	{
+    virtual void GetGradientImage( itkImageBase^ image ) override
+    {
         m_Instance->GetGradientImage( image );
     }
 
-	///<summary>Set the parameters defining the Transform.</summary>
-	virtual void SetTransformParameters( itkArray<double>^ parameters ) override
-	{
+    ///<summary>Set the parameters defining the Transform.</summary>
+    virtual void SetTransformParameters( itkArray<double>^ parameters ) override
+    {
         m_Instance->SetTransformParameters( parameters );
     }
 
-	///<summary>
-	///Initialize the Metric by making sure that all the components are present
-	///and plugged together correctly.
-	///</summary>
-	virtual void Initialize( ) override
-	{
+    ///<summary>
+    ///Initialize the Metric by making sure that all the components are present
+    ///and plugged together correctly.
+    ///</summary>
+    virtual void Initialize( ) override
+    {
         m_Instance->Initialize();
     }
     @MANAGED_PROPERTIES_WRAPPER@ @MANAGED_METHODS_WRAPPER@
 
 private:
     ///<summary>Pass managed events from the type instance to this wrapper instance.</summary>
-	void PassEventsFromTypeToWrapper()
-	{
+    void PassEventsFromTypeToWrapper()
+    {
         this->m_Instance->Started += gcnew itkEventHandler(this, &itk@MANAGED_BASE_NAME@::Instance_StartedHandler);
-		this->m_Instance->Ended += gcnew itkEventHandler(this, &itk@MANAGED_BASE_NAME@::Instance_EndedHandler);
-		this->m_Instance->Aborted += gcnew itkEventHandler(this, &itk@MANAGED_BASE_NAME@::Instance_AbortedHandler);
-		this->m_Instance->Iteration += gcnew itkEventHandler(this, &itk@MANAGED_BASE_NAME@::Instance_IterationHandler);
-		this->m_Instance->Modified += gcnew itkEventHandler(this, &itk@MANAGED_BASE_NAME@::Instance_ModifiedHandler);
-	}
+        this->m_Instance->Ended += gcnew itkEventHandler(this, &itk@MANAGED_BASE_NAME@::Instance_EndedHandler);
+        this->m_Instance->Aborted += gcnew itkEventHandler(this, &itk@MANAGED_BASE_NAME@::Instance_AbortedHandler);
+        this->m_Instance->Iteration += gcnew itkEventHandler(this, &itk@MANAGED_BASE_NAME@::Instance_IterationHandler);
+        this->m_Instance->Modified += gcnew itkEventHandler(this, &itk@MANAGED_BASE_NAME@::Instance_ModifiedHandler);
+    }
 
-	///<summary>Handle the Started event.</summary>
-	void Instance_StartedHandler(itkObject^ sender, itkEventArgs^ e)
-	{
-		this->InvokeStartedEvent(e);
-	}
+    ///<summary>Handle the Started event.</summary>
+    void Instance_StartedHandler(itkObject^ sender, itkEventArgs^ e)
+    {
+        this->InvokeStartedEvent(e);
+    }
 
     ///<summary>Handle the Ended event.</summary>
-	void Instance_EndedHandler(itkObject^ sender, itkEventArgs^ e)
-	{
-		this->InvokeEndedEvent(e);
-	}
-	
+    void Instance_EndedHandler(itkObject^ sender, itkEventArgs^ e)
+    {
+        this->InvokeEndedEvent(e);
+    }
+    
     ///<summary>Handle the Aborted event.</summary>
-	void Instance_AbortedHandler(itkObject^ sender, itkEventArgs^ e)
-	{
-		this->InvokeAbortedEvent(e);
-	}
+    void Instance_AbortedHandler(itkObject^ sender, itkEventArgs^ e)
+    {
+        this->InvokeAbortedEvent(e);
+    }
 
     ///<summary>Handle the Iteration event.</summary>
-	void Instance_IterationHandler(itkObject^ sender, itkEventArgs^ e)
-	{
-		this->InvokeIterationEvent(e);
-	}
+    void Instance_IterationHandler(itkObject^ sender, itkEventArgs^ e)
+    {
+        this->InvokeIterationEvent(e);
+    }
 
     ///<summary>Handle the Modified event.</summary>
-	void Instance_ModifiedHandler(itkObject^ sender, itkEventArgs^ e)
-	{
-		this->InvokeModifiedEvent(e);
-	}
+    void Instance_ModifiedHandler(itkObject^ sender, itkEventArgs^ e)
+    {
+        this->InvokeModifiedEvent(e);
+    }
 
 }; // end ref class
 
