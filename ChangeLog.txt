@@ -1,3 +1,11 @@
+Version 3.20
+- Various changes to make compile with ITK3.20
+- Added VectorREsampleImageFilter
+- Add wrapping of real types (eg. float) for watershed filters
+
+Version 3.14.0
+- Various changes to make compile with ITK3.14
+
 Version 3.10.2
 - BREAKING CHANGE: Replaced custom binary morphological filters with those in Code/Review
 - Added wrapping for VanHerkGilWerman erode/dilate filters (in ManagedITK.MorphologicalFilters)
