@@ -1,8 +1,7 @@
 http://code.google.com/p/manageditk/
 Dan Mueller
 dan [dot] muel [at] gmail [dot] com
-October 2008
-
+August 2010
 
 == Description ==
 ManagedITK generates wrappers around ITK for .NET languages.

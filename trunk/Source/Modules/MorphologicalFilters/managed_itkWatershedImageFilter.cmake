@@ -2,7 +2,9 @@ WRAP_CLASS("itk::WatershedImageFilter")
 
   WRAP_IMAGE_FILTER_USIGN_INT(1)
   WRAP_IMAGE_FILTER_SIGN_INT(1)
-  WRAP_IMAGE_FILTER_REAL(1)
+  IF(NOT WRAP_unsigned_long)
+    WRAP_IMAGE_FILTER("UL" 2)
+  ENDIF(NOT WRAP_unsigned_long)
 
   BEGIN_MANAGED_PROPERTY("Threshold" GETSET)
     SET(MANAGED_PROPERTY_SUMMARY   "Get/set the input thresholding parameter. Units are a percentage of the maximum depth in the image.")

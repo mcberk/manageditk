@@ -2,7 +2,6 @@ WRAP_CLASS("itk::MorphologicalWatershedImageFilter")
 
   WRAP_IMAGE_FILTER_USIGN_INT(2)
   WRAP_IMAGE_FILTER_SIGN_INT(2)
-  WRAP_IMAGE_FILTER_REAL(2)
   IF(NOT WRAP_unsigned_long)
     WRAP_IMAGE_FILTER("UL" 2)
   ENDIF(NOT WRAP_unsigned_long)
